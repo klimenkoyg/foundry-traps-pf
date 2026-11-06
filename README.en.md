@@ -2,6 +2,8 @@
 
 [Русский](README.md) · **English**
 
+> 🎲 **Playing D&D 5e?** You want the **[Trap Library for D&D 5e](https://github.com/klimenkoyg/foundry-traps)** — the same traps with 5th edition rules.
+
 A trap library for **Pathfinder 2e** in Foundry VTT, with animations and sounds. The GM drags a trap
 onto the map — it becomes a hidden region that fires when a character steps in: an effect on the
 scene, a save or an attack with four degrees of success, damage with immunities, weaknesses and
