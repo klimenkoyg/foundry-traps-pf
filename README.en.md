@@ -1,8 +1,8 @@
 # Западня PF2e · Trap Library PF2e
 
-| 🐉 [D&D 5e](https://github.com/klimenkoyg/foundry-traps) | 🧭 **Pathfinder 2e** |
-|:---:|:---:|
-| [Русский](https://github.com/klimenkoyg/foundry-traps#readme) · [English](https://github.com/klimenkoyg/foundry-traps/blob/main/README.en.md) | [Русский](README.md) · **English** |
+| 🐉 [D&D 5e](https://github.com/klimenkoyg/foundry-traps) | 🧭 **Pathfinder 2e** | 🎲 [Any system / Любая система](https://github.com/klimenkoyg/foundry-traps-universal) |
+|:---:|:---:|:---:|
+| [Русский](https://github.com/klimenkoyg/foundry-traps#readme) · [English](https://github.com/klimenkoyg/foundry-traps/blob/main/README.en.md) | [Русский](README.md) · **English** | [Русский](https://github.com/klimenkoyg/foundry-traps-universal#readme) · [English](https://github.com/klimenkoyg/foundry-traps-universal/blob/main/README.en.md) |
 
 ![Trap Library PF2e — traps for Pathfinder 2e in Foundry VTT](docs/promo/banner-en.png)
 
