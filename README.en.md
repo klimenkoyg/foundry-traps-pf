@@ -1,8 +1,8 @@
 # Западня PF2e · Trap Library PF2e
 
-[Русский](README.md) · **English**
-
-> 🎲 **Playing D&D 5e?** You want the **[Trap Library for D&D 5e](https://github.com/klimenkoyg/foundry-traps)** — the same traps with 5th edition rules.
+| 🐉 [D&D 5e](https://github.com/klimenkoyg/foundry-traps) | 🧭 **Pathfinder 2e** |
+|:---:|:---:|
+| [Русский](https://github.com/klimenkoyg/foundry-traps#readme) · [English](https://github.com/klimenkoyg/foundry-traps/blob/main/README.en.md) | [Русский](README.md) · **English** |
 
 A trap library for **Pathfinder 2e** in Foundry VTT, with animations and sounds. The GM drags a trap
 onto the map — it becomes a hidden region that fires when a character steps in: an effect on the

@@ -1,8 +1,8 @@
 # Западня PF2e · Trap Library PF2e
 
-**Русский** · [English](README.en.md)
-
-> 🎲 **Играете в D&D 5e?** Вам нужна **[«Западня» для D&D 5e](https://github.com/klimenkoyg/foundry-traps)** — те же ловушки по правилам пятой редакции.
+| 🐉 [D&D 5e](https://github.com/klimenkoyg/foundry-traps) | 🧭 **Pathfinder 2e** |
+|:---:|:---:|
+| [Русский](https://github.com/klimenkoyg/foundry-traps#readme) · [English](https://github.com/klimenkoyg/foundry-traps/blob/main/README.en.md) | **Русский** · [English](README.en.md) |
 
 Библиотека ловушек для **Pathfinder 2e** в Foundry VTT, с анимациями и звуками. Ведущий перетаскивает
 ловушку на карту — она встаёт скрытой областью и срабатывает, когда на неё наступает персонаж: эффект
