@@ -4,6 +4,8 @@
 |:---:|:---:|
 | [Русский](https://github.com/klimenkoyg/foundry-traps#readme) · [English](https://github.com/klimenkoyg/foundry-traps/blob/main/README.en.md) | [Русский](README.md) · **English** |
 
+![Trap Library PF2e — traps for Pathfinder 2e in Foundry VTT](docs/promo/banner-en.png)
+
 A trap library for **Pathfinder 2e** in Foundry VTT, with animations and sounds. The GM drags a trap
 onto the map — it becomes a hidden region that fires when a character steps in: an effect on the
 scene, a save or an attack with four degrees of success, damage with immunities, weaknesses and

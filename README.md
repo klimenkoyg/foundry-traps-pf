@@ -4,6 +4,8 @@
 |:---:|:---:|
 | [Русский](https://github.com/klimenkoyg/foundry-traps#readme) · [English](https://github.com/klimenkoyg/foundry-traps/blob/main/README.en.md) | **Русский** · [English](README.en.md) |
 
+![Западня PF2e · Trap Library PF2e — ловушки для Pathfinder 2e в Foundry VTT](docs/promo/banner-ru.png)
+
 Библиотека ловушек для **Pathfinder 2e** в Foundry VTT, с анимациями и звуками. Ведущий перетаскивает
 ловушку на карту — она встаёт скрытой областью и срабатывает, когда на неё наступает персонаж: эффект
 на сцене, спасбросок или атака по четырём степеням успеха, урон с иммунитетами, слабостями и

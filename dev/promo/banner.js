@@ -9,17 +9,17 @@ import { seedOf } from "/scripts/core/tells.mjs";
 const TEXT = {
   ru: {
     h1: "Западня",
-    sub: "Trap Library",
+    sub: "Trap Library · PF2e",
     tag: "Ловушки для Pathfinder 2e в Foundry VTT",
     lead: "Перетащи ловушку на карту — дальше она сработает сама: анимация, звук, спасброски и урон.",
-    meta: ["18 ловушек", "Foundry v13–v14", "бесплатно", "RU · EN"],
+    meta: ["18 ловушек", "PF2e Remaster", "Foundry v13–v14", "бесплатно", "RU · EN"],
   },
   en: {
     h1: "Trap Library",
-    sub: "",
+    sub: "Pathfinder 2e",
     tag: "Traps for Pathfinder 2e in Foundry VTT",
-    lead: "Drag a trap onto the map — it does the rest: animation, sound, saving throws and damage.",
-    meta: ["18 traps", "Foundry v13–v14", "free", "EN · RU"],
+    lead: "Drag a trap onto the map — it does the rest: animation, sound, PF2e saves and damage.",
+    meta: ["18 traps", "PF2e Remaster", "Foundry v13–v14", "free", "EN · RU"],
   },
 };
 
@@ -108,10 +108,10 @@ function trap(id, col, row, w, h, state = "armed", extra = {}) {
 floor();
 light();
 // Справа — «комната» с ловушками; слева их закрывает тень под текстом.
-trap("spikedPit", 8, 1, 2, 2, "spent", { options: { depth: 40, spikes: "stakes", walls: "rough" } });
-trap("frostRune", 11, 1, 2, 2);
-trap("fireJet", 7, 4, 2, 2, "spent", { options: { pressure: "strong", nozzles: "ring" } });
-trap("poisonGas", 10, 4, 2, 2);
-trap("bearTrap", 12, 4, 1, 1);
-trap("fallingNet", 11, 6, 2, 1, "armed", { options: { net: "weighted" } });
+trap("rollingBoulder", 8, 1, 2, 2);
+trap("lightningRune", 11, 1, 2, 2);
+trap("collapsingRoof", 7, 4, 2, 2, "spent");
+trap("witheringSigil", 10, 4, 2, 2);
+trap("poisonDarts", 12, 4, 1, 1);
+trap("spikedPit", 11, 6, 2, 1, "spent", { options: { depth: 30, spikes: "poisoned", walls: "rough" } });
 document.body.dataset.ready = "1";
