@@ -1,0 +1,43 @@
+<aside class="st-ed-side">
+  <div class="st-ed-preview">
+    {{> "modules/ssl_traps_pf2e/templates/trap-card.hbs" preview}}
+    {{#if flavor}}
+    <figure class="st-ed-flavor">
+      <figcaption>{{localize "TRAPS.Editor.playersSee"}}</figcaption>
+      <blockquote>{{flavor}}</blockquote>
+    </figure>
+    {{/if}}
+    {{#if tiers}}
+    <section class="st-ed-tiers{{#if tiers.fixed}} is-fixed{{/if}}">
+      {{#if tiers.fixed}}
+      <p class="st-ed-tiers-fixed">{{tiers.text}}</p>
+      {{else}}
+      <h4>{{localize "TRAPS.Editor.tiersTitle"}}</h4>
+      <table>
+        <tbody>
+          {{#each tiers.rows}}
+          <tr{{#if current}} class="is-current" aria-current="true"{{/if}}><th scope="row">{{levels}}</th><td class="st-ed-tiers-x">{{factor}}</td><td>{{damage}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{/if}}
+    </section>
+    {{/if}}
+    {{#unless isScene}}<p class="st-ed-note">{{localize "TRAPS.Editor.dragHint"}}</p>{{/unless}}
+  </div>
+  <div class="st-ed-actions">
+    {{#if isScene}}
+    <button type="button" class="st-btn is-primary{{#if dirty}} is-dirty{{/if}}" data-action="apply"><i class="fa-solid fa-check" inert></i> {{localize "TRAPS.Editor.apply"}}</button>
+    {{else}}
+    <button type="button" class="st-btn is-primary" data-action="place" data-tooltip="{{localize "TRAPS.Editor.placeHint"}}"><i class="fa-solid fa-map-pin" inert></i> {{localize "TRAPS.Editor.place"}}</button>
+    {{/if}}
+    <button type="button" class="st-btn" data-action="saveLibrary"><i class="fa-solid fa-book-medical" inert></i> {{saveLabel}}</button>
+    {{#if isCustom}}
+    <button type="button" class="st-btn" data-action="saveCopy"><i class="fa-solid fa-clone" inert></i> {{localize "TRAPS.Editor.saveCopy"}}</button>
+    {{/if}}
+    <div class="st-ed-actions-row">
+      <button type="button" class="st-btn is-quiet" data-action="play"><i class="fa-solid fa-play" inert></i> {{localize "TRAPS.Editor.play"}}</button>
+      <button type="button" class="st-btn is-quiet" data-action="reset" {{#unless dirty}}disabled{{/unless}}><i class="fa-solid fa-rotate-left" inert></i> {{localize "TRAPS.Editor.reset"}}</button>
+    </div>
+  </div>
+</aside>

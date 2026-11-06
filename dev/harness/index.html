@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Западня · стенд</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Стили — без кеша, чтобы правки были видны сразу -->
+  <script>for (const href of ["/styles/fonts.css", "/styles/traps.css", "/styles/theme-heroic.css", "harness.css"]) document.write(`<link rel="stylesheet" href="${href}?t=${Date.now()}">`);</script>
+</head>
+<body>
+  <header class="hbar">
+    <b><i class="fa-solid fa-flask"></i> Стенд «Западни»</b>
+    <button type="button" id="open"><i class="fa-solid fa-skull-crossbones"></i> Открыть библиотеку</button>
+    <button type="button" id="demo">Поставить три ловушки</button>
+    <button type="button" id="view"><i class="fa-solid fa-user"></i> Глазами игрока</button>
+    <button type="button" id="reset">Сбросить</button>
+    <small>Имитация Foundry: работает настоящий код модуля. Щелчок по токену — выделить, по клетке — идти, по двери — открыть. Ловушку тащите из окна на карту.</small>
+  </header>
+  <div id="stage">
+    <div id="board"><nav id="controls" aria-label="Панель Foundry"></nav><canvas id="map"></canvas><div id="hud"></div><div id="windows"></div><p id="player-note"><i class="fa-solid fa-user"></i> Так карту видит игрок: окна ведущего спрятаны, ловушки по-прежнему срабатывают.</p></div>
+    <aside id="side">
+      <h3>Отряд</h3>
+      <div id="party"></div>
+      <h3>Чат</h3>
+      <div id="chat-log"></div>
+    </aside>
+  </div>
+  <div id="toasts"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+  <script src="foundry-mock.js"></script>
+  <script type="module" src="harness.js"></script>
+</body>
+</html>

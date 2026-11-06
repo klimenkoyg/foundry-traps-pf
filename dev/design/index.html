@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Западня · витрина</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Стили — без кеша, чтобы правки были видны сразу -->
+  <script>for (const href of ["/styles/fonts.css", "/styles/traps.css", "/styles/theme-heroic.css", "design.css"]) document.write(`<link rel="stylesheet" href="${href}?t=${Date.now()}">`);</script>
+</head>
+<body>
+  <header class="bar">
+    <div>
+      <b>Западня · витрина интерфейса</b>
+      <small>Настоящие шаблоны и стили модуля, данные — тестовые. Так это будет выглядеть в Foundry.</small>
+    </div>
+    <nav>
+      <a href="#window">Окно ведущего</a>
+      <a href="#chat">Чат</a>
+      <a href="#fx">Анимации</a>
+      <a href="/dev/harness/index.html" class="is-live"><i class="fa-solid fa-play"></i> Живой стенд</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="window">
+      <h2>Окно ведущего</h2>
+      <p class="lead">Открывается кнопкой с черепом на панели токенов. Ловушку перетаскивают из библиотеки на карту.</p>
+      <div class="pair">
+        <figure><figcaption>Библиотека</figcaption><div class="frame" id="win-library"></div></figure>
+        <figure><figcaption>На этой сцене</figcaption><div class="frame" id="win-scene"></div></figure>
+      </div>
+    </section>
+
+    <section id="chat">
+      <h2>Чат</h2>
+      <p class="lead">Карточка срабатывания — одна на ловушку: текст для игроков, проверка, урон и что стало с каждым. Шёпот — ведущему и владельцу персонажа.</p>
+      <div class="chat-columns">
+        <div class="chat" id="chat-a"></div>
+        <div class="chat" id="chat-b"></div>
+        <div class="chat" id="chat-c"></div>
+      </div>
+    </section>
+
+    <section id="fx">
+      <h2>Анимации</h2>
+      <p class="lead">Свои, без сторонних модулей; звук у каждой ловушки свой. Щелчок по картинке — повторить.</p>
+      <iframe src="/dev/fx/index.html" title="Анимации ловушек" loading="lazy"></iframe>
+    </section>
+  </main>
+
+  <div id="windows" hidden></div>
+  <div id="toasts" hidden></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+  <script src="/dev/harness/foundry-mock.js"></script>
+  <script type="module" src="design.js"></script>
+</body>
+</html>

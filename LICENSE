@@ -1,0 +1,99 @@
+Права и разрешения
+
+© 2026 Yuriy Klimenko. Все права на модуль «Западня PF2e · Trap Library PF2e» и его
+содержимое (код, тексты ловушек, анимации и звуки) остаются за автором.
+
+Разрешено бесплатно:
+- пользоваться модулем в своих играх — за столом, в сети, на записи и в прямой
+  передаче, в том числе если сама игра платная;
+- распространять модуль — передавать копии, выкладывать у себя, включать
+  в бесплатные сборки — при трёх условиях: целиком, без изменений и с сохранением
+  имени автора и этого текста.
+
+Не разрешено без письменного согласия автора:
+- изменять и дорабатывать модуль или его части, пользоваться изменённой версией
+  и распространять её;
+- брать части модуля в другие модули и программы;
+- продавать модуль или его части, сдавать в прокат, брать плату за доступ к нему,
+  в том числе в составе платных сборок и подписок;
+- выдавать модуль за своё, убирать имя автора и этот текст.
+
+Изменением модуля не считается:
+- менять его настройки, создавать и править ловушки в окне модуля, сохранять
+  свои в «Мои ловушки»;
+- делиться сценами и мирами, где расставлены ловушки.
+
+Форк на GitHub. Правила GitHub разрешают любому пользователю смотреть открытый
+репозиторий и делать его копию на GitHub (форк). Форк — это копия, а не
+разрешение: менять в нём код, пользоваться изменённой версией и распространять
+её можно только с согласия автора.
+
+Правки и согласие. Предложить правку можно в Issues или pull request'ом:
+https://github.com/klimenkoyg/foundry-traps. Там же можно попросить согласие на
+изменения; согласие действует, если автор дал его письменно, в том числе
+в переписке. Присылая правку, вы разрешаете автору бесплатно использовать её
+в модуле и распространять на этих условиях.
+
+Часть игровой механики (сложности спасбросков и бонусы атаки по опасности,
+урон по уровню) взята из System Reference Document 5.1 (Wizards of the Coast LLC),
+доступного по лицензии Creative Commons Attribution 4.0 International:
+https://creativecommons.org/licenses/by/4.0/legalcode. На эти правила запреты
+выше не действуют.
+
+Шрифты Alegreya, Alegreya Sans и Cormorant SC (папка fonts/) распространяются
+по лицензии SIL Open Font License 1.1 — см. fonts/OFL.txt. На них запреты выше
+тоже не действуют.
+
+Модуль поставляется «как есть», без каких-либо гарантий.
+
+
+Rights and permissions (English translation)
+
+© 2026 Yuriy Klimenko. All rights to the module “Западня PF2e · Trap Library PF2e” and
+its contents (code, trap texts, animations and sounds) remain with the author.
+
+You may, free of charge:
+- use the module in your own games — at the table, online, recorded or
+  streamed, including games you are paid to run;
+- distribute the module — pass on copies, host it, include it in free
+  compilations — on three conditions: in full, unmodified, and with the
+  author's name and this notice kept.
+
+You may not, without the author's written consent:
+- modify or build upon the module or any part of it, use a modified version,
+  or distribute one;
+- take parts of the module into other modules or software;
+- sell the module or any part of it, rent it out, or charge for access to it,
+  including as part of paid compilations or subscriptions;
+- present the module as your own, or remove the author's name or this notice.
+
+The following is not a modification of the module:
+- changing its settings, creating and editing traps in the module window,
+  saving your own under “My traps”;
+- sharing scenes and worlds with traps placed in them.
+
+GitHub forks. GitHub's terms let any user view a public repository and copy it
+on GitHub (fork it). A fork is a copy, not a permission: changing its code,
+using a modified version or distributing one still requires the author's
+consent.
+
+Changes and consent. You can suggest a change in Issues or with a pull request:
+https://github.com/klimenkoyg/foundry-traps. You can also ask for consent to
+make changes there; consent counts only if the author gives it in writing,
+including in a message. By sending a change, you allow the author to use it
+in the module free of charge and distribute it under these terms.
+
+This work includes material taken from the System Reference Document 5.1
+(“SRD 5.1”) by Wizards of the Coast LLC, available at
+https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is
+licensed under the Creative Commons Attribution 4.0 International License,
+https://creativecommons.org/licenses/by/4.0/legalcode. The restrictions above
+do not apply to that material.
+
+The Alegreya, Alegreya Sans and Cormorant SC fonts (the fonts/ folder) are
+licensed under the SIL Open Font License 1.1 — see fonts/OFL.txt. The
+restrictions above do not apply to them either.
+
+The module is provided “as is”, without warranty of any kind.
+
+In case of any discrepancy, the Russian text above prevails.

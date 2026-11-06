@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Западня · метки</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root { color-scheme: dark; --bg: #16130f; --panel: #221d17; --line: #3a3128; --ink: #e9e0d0; --muted: #a8998a; --accent: #d9a441; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, sans-serif; }
+    header { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); }
+    header b { font-size: 15px; }
+    header small { color: var(--muted); }
+    button { background: #2d261e; color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; font: inherit; cursor: pointer; }
+    button:hover { border-color: var(--accent); }
+    main { padding: 4px 16px 32px; }
+    h2 { margin: 22px 0 4px; font-size: 16px; }
+    h2 + p { margin: 0 0 12px; color: var(--muted); max-width: 72ch; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+    .grid.is-small { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+    .is-zoom .grid, .is-zoom .grid.is-small { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); }
+    figure canvas { display: block; width: 100%; height: auto; background: #2f2a25; cursor: pointer; }
+    .pair span { display: block; padding: 3px 8px; background: #1b1713; color: var(--muted); font-size: 12px; }
+    figcaption { padding: 8px 10px 10px; color: var(--muted); }
+    figcaption b { display: block; color: var(--ink); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header>
+    <b>Западня · метки замеченных ловушек</b>
+    <button type="button" id="replay"><i class="fa-solid fa-rotate-right"></i> Показать появление</button>
+    <small>Щелчок по картинке — проиграть появление метки. Настоящий код: scripts/core/marker.mjs и tells.mjs.</small>
+  </header>
+  <main>
+    <h2>Ловушки библиотеки</h2>
+    <p>Слева — что видят игроки, когда персонаж заметил ловушку. Справа — что остаётся на карте после срабатывания одноразовой ловушки. Рамка и скобы по углам — цвет опасности.</p>
+    <div class="grid" id="catalog"></div>
+
+    <h2>Рисунок следует за настройкой</h2>
+    <p>Те же ловушки с другими параметрами устройства.</p>
+    <div class="grid is-small" id="variants"></div>
+
+    <h2>Прямоугольные области</h2>
+    <p>Ширина и высота задаются отдельно. Растяжка, щель маятника, колея валуна и отверстия для дротиков поворачиваются вдоль коридора; знаки рун и решётки газа повторяются по его длине.</p>
+    <div class="grid is-small" id="rects"></div>
+
+    <h2>Обезврежена и для ведущего</h2>
+    <p>Обезвреженная ловушка выцветает и получает зелёную галочку. Ведущий видит бледный рисунок ловушек, которых игроки ещё не заметили.</p>
+    <div class="grid is-small" id="states"></div>
+  </main>
+  <script type="module" src="markers.js"></script>
+</body>
+</html>

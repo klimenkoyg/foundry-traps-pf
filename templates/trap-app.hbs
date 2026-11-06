@@ -1,0 +1,139 @@
+<div class="st-root">
+  <nav class="st-tabs" role="tablist">
+    <button type="button" role="tab" data-action="switchTab" data-tab="library" aria-selected="{{#if isLibrary}}true{{else}}false{{/if}}" class="{{#if isLibrary}}is-active{{/if}}">
+      <i class="fa-solid fa-book-skull" inert></i> {{localize "TRAPS.App.tabLibrary"}}
+    </button>
+    <button type="button" role="tab" data-action="switchTab" data-tab="mine" aria-selected="{{#if isMine}}true{{else}}false{{/if}}" class="{{#if isMine}}is-active{{/if}}">
+      <i class="fa-solid fa-feather-pointed" inert></i> {{localize "TRAPS.App.tabMine"}}
+      {{#if mineCount}}<span class="st-count">{{mineCount}}</span>{{/if}}
+    </button>
+    <button type="button" role="tab" data-action="switchTab" data-tab="scene" aria-selected="{{#if isScene}}true{{else}}false{{/if}}" class="{{#if isScene}}is-active{{/if}}">
+      <i class="fa-solid fa-map-location-dot" inert></i> {{localize "TRAPS.App.tabScene"}}
+      {{#if sceneCount}}<span class="st-count">{{sceneCount}}</span>{{/if}}
+    </button>
+  </nav>
+
+  {{#if isGrid}}
+  {{#if isMine}}{{#unless entries.length}}
+  <div class="st-mine-empty">
+    <i class="fa-solid fa-feather-pointed" inert></i>
+    <h3>{{localize "TRAPS.App.mineEmptyTitle"}}</h3>
+    <p>{{localize "TRAPS.App.mineEmpty"}}</p>
+    <button type="button" class="st-btn is-primary" data-action="switchTab" data-tab="library"><i class="fa-solid fa-book-skull" inert></i> {{localize "TRAPS.App.toLibrary"}}</button>
+  </div>
+  {{/unless}}{{/if}}
+  {{#if entries.length}}
+  <div class="st-toolbar">
+    <label class="st-search">
+      <i class="fa-solid fa-magnifying-glass" inert></i>
+      <input type="search" data-filter="query" value="{{filter.query}}" placeholder="{{localize "TRAPS.App.search"}}" aria-label="{{localize "TRAPS.App.search"}}">
+    </label>
+    <select data-filter="severity" aria-label="{{localize "TRAPS.App.allSeverities"}}">
+      <option value="">{{localize "TRAPS.App.allSeverities"}}</option>
+      {{#each severities}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+    </select>
+    <select data-filter="kind" aria-label="{{localize "TRAPS.Kind.all"}}">
+      <option value="">{{localize "TRAPS.Kind.all"}}</option>
+      {{#each kinds}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+    </select>
+    <select data-filter="damageType" aria-label="{{localize "TRAPS.App.allDamage"}}">
+      <option value="">{{localize "TRAPS.App.allDamage"}}</option>
+      {{#each damageTypes}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+    </select>
+    <label class="st-tier" data-tooltip="{{localize "TRAPS.Tier.hint"}}">
+      <span>{{localize "TRAPS.Tier.label"}}</span>
+      <select data-tier>
+        {{#each tiers}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+      </select>
+    </label>
+  </div>
+  <p class="st-hint"><i class="fa-solid fa-hand-pointer" inert></i> {{#if isMine}}{{localize "TRAPS.App.mineHint"}}{{else}}{{localize "TRAPS.App.dragHint"}}{{/if}}</p>
+
+  <div class="st-scroll">
+    <div class="st-grid">
+      {{#each entries}}
+      {{> "modules/ssl_traps_pf2e/templates/trap-card.hbs"}}
+      {{/each}}
+    </div>
+    <p class="st-empty st-empty-filter" hidden>{{localize "TRAPS.App.empty"}}</p>
+  </div>
+  {{/if}}
+
+  {{else}}
+
+  {{#if scene}}
+  <div class="st-toolbar">
+    <b class="st-scene-name"><i class="fa-solid fa-map" inert></i> {{scene.name}}</b>
+    <button type="button" class="st-btn" data-action="search" data-tooltip="{{searchHint}}">
+      <i class="fa-solid fa-magnifying-glass" inert></i> {{localize "TRAPS.App.searchSelected"}}
+    </button>
+    {{#if scene.traps.length}}
+    <div class="st-vis-all" role="group" aria-label="{{localize "TRAPS.App.visibility"}}">
+      <span>{{localize "TRAPS.App.visibility"}}</span>
+      <button type="button" class="st-btn" data-action="revealAll" data-tooltip="{{localize "TRAPS.App.revealAllHint"}}" {{#unless scene.anyHidden}}disabled{{/unless}}><i class="fa-solid fa-eye" inert></i> {{localize "TRAPS.App.revealAll"}}</button>
+      <button type="button" class="st-btn" data-action="hideAll" data-tooltip="{{localize "TRAPS.App.hideAllHint"}}" {{#unless scene.anyShown}}disabled{{/unless}}><i class="fa-solid fa-eye-slash" inert></i> {{localize "TRAPS.App.hideAll"}}</button>
+    </div>
+    {{/if}}
+  </div>
+  <div class="st-toolbar st-detect-mode">
+    {{#each modes}}
+    <div class="st-mode">
+      <span id="st-mode-{{key}}">{{label}}</span>
+      <div class="st-seg" role="radiogroup" aria-labelledby="st-mode-{{key}}">
+        {{#each options}}
+        <label data-tooltip="{{hint}}"><input type="radio" name="{{../key}}" data-setting="{{../key}}" value="{{value}}" {{#if checked}}checked{{/if}}><span>{{label}}</span></label>
+        {{/each}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  <div class="st-scroll">
+    {{#if scene.traps.length}}
+    <ul class="st-list">
+      {{#each scene.traps}}
+      <li class="st-row {{#unless armed}}is-off{{/unless}}" data-region="{{regionId}}" data-behavior="{{behaviorId}}">
+        <span class="st-icon" data-severity="{{severity}}"><i class="{{icon}}" inert></i></span>
+        <div class="st-row-main">
+          <div class="st-row-head">
+            <b>{{name}}</b>
+            <span class="st-sev" data-severity="{{severity}}">{{severityLabel}}</span>
+            <span class="st-badge {{#if armed}}is-armed{{else}}is-off{{/if}}">{{#if armed}}{{localize "TRAPS.App.armed"}}{{else}}{{localize "TRAPS.App.disarmed"}}{{/if}}</span>
+            <button type="button" class="st-badge st-vis{{#if visible}} is-shown{{/if}}" data-action="toggleVisible" aria-pressed="{{#if visible}}true{{else}}false{{/if}}" data-tooltip="{{#if visible}}{{localize "TRAPS.App.hide"}}{{else}}{{localize "TRAPS.App.reveal"}}{{/if}}">{{#if visible}}<i class="fa-solid fa-eye" inert></i> {{localize "TRAPS.App.revealed"}}{{else}}<i class="fa-solid fa-eye-slash" inert></i> {{localize "TRAPS.App.hidden"}}{{/if}}</button>
+            {{#if detected}}{{#unless visible}}<span class="st-badge is-detected"><i class="fa-solid fa-circle-exclamation" inert></i> {{#if noticed}}{{noticed}}{{else}}{{localize "TRAPS.App.detected"}}{{/if}}</span>{{/unless}}{{/if}}
+            {{#if triggers}}<span class="st-badge">{{triggersLabel}}</span>{{/if}}
+            {{#if activation}}<span class="st-badge is-activation{{#if manual}} is-manual{{/if}}"><i class="fa-solid {{#if manual}}fa-hand-pointer{{else}}fa-shoe-prints{{/if}}" inert></i> {{activation}}</span>{{/if}}
+          </div>
+          <div class="st-row-stats">
+            <span><i class="fa-solid fa-vector-square" inert></i> {{area}}</span>
+            {{#each stats}}<span data-tooltip="{{label}}"><i class="fa-solid {{icon}}" inert></i> {{value}}</span>{{/each}}
+          </div>
+        </div>
+        <div class="st-row-actions">
+          <button type="button" class="st-icon-btn" data-action="pan" data-tooltip="{{localize "TRAPS.App.pan"}}" aria-label="{{localize "TRAPS.App.pan"}}"><i class="fa-solid fa-location-crosshairs" inert></i></button>
+          <button type="button" class="st-icon-btn" data-action="trigger" data-tooltip="{{localize "TRAPS.App.triggerHint"}}" aria-label="{{localize "TRAPS.App.trigger"}}"><i class="fa-solid fa-bolt" inert></i></button>
+          <button type="button" class="st-icon-btn" data-action="addActivator" data-tooltip="{{localize "TRAPS.App.addActivatorHint"}}" aria-label="{{localize "TRAPS.App.addActivator"}}"><i class="fa-solid fa-shoe-prints" inert></i></button>
+          <button type="button" class="st-icon-btn" data-action="attempt" data-tooltip="{{localize "TRAPS.App.attempt"}}" aria-label="{{localize "TRAPS.App.attempt"}}"><i class="fa-solid fa-screwdriver-wrench" inert></i></button>
+          <button type="button" class="st-icon-btn" data-action="toggleArmed" data-tooltip="{{#if armed}}{{localize "TRAPS.App.disarm"}}{{else}}{{localize "TRAPS.App.arm"}}{{/if}}" aria-label="{{#if armed}}{{localize "TRAPS.App.disarm"}}{{else}}{{localize "TRAPS.App.arm"}}{{/if}}"><i class="fa-solid {{#if armed}}fa-power-off{{else}}fa-rotate-left{{/if}}" inert></i></button>
+          <button type="button" class="st-icon-btn" data-action="configure" data-tooltip="{{localize "TRAPS.App.configure"}}" aria-label="{{localize "TRAPS.App.configure"}}"><i class="fa-solid fa-sliders" inert></i></button>
+          <button type="button" class="st-icon-btn" data-action="saveTrap" data-tooltip="{{localize "TRAPS.App.save"}}" aria-label="{{localize "TRAPS.App.save"}}"><i class="fa-solid fa-book-medical" inert></i></button>
+          <button type="button" class="st-icon-btn is-danger" data-action="deleteTrap" data-tooltip="{{localize "TRAPS.App.delete"}}" aria-label="{{localize "TRAPS.App.delete"}}"><i class="fa-solid fa-trash" inert></i></button>
+        </div>
+      </li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p class="st-empty">{{localize "TRAPS.App.sceneEmpty"}}</p>
+    {{/if}}
+  </div>
+  {{else}}
+  <p class="st-empty">{{localize "TRAPS.App.noScene"}}</p>
+  {{/if}}
+
+  {{/if}}
+
+  {{#if ideasUrl}}
+  <footer class="st-app-foot">
+    <a class="st-idea" href="{{ideasUrl}}" target="_blank" rel="noopener noreferrer" data-tooltip="{{localize "TRAPS.App.ideaHint"}}"><i class="fa-solid fa-lightbulb" inert></i><span>{{localize "TRAPS.App.idea"}}</span><i class="fa-solid fa-arrow-up-right-from-square" inert></i></a>
+  </footer>
+  {{/if}}
+</div>

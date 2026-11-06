@@ -1,0 +1,323 @@
+/* Западня · оформление «Героический»: тёмные панели в двойной золотой оправе, медальоны,
+   торжественные заголовки. Включается атрибутом data-st-theme="heroic" на окне, карточке чата
+   или их предке (модуль ставит его сам). Шрифты — styles/fonts.css. */
+
+/* =====================================================================
+   3. ГЕРОИЧЕСКИЙ — тёмные панели в золотой оправе, торжественные заголовки.
+   ===================================================================== */
+
+:is(.ssl-traps, .ssl-traps-card, .ssl-traps-note):is([data-st-theme="heroic"], [data-st-theme="heroic"] *) {
+  --st-bg: #0e0c0a;
+  --st-bg-2: #15120e;
+  --st-surface: #1b1713;
+  --st-surface-2: #241f19;
+  --st-line: #6e5a37;
+  --st-line-soft: #362c20;
+  --st-ink: #f4ecde;
+  --st-ink-2: #d6c9b3;
+  --st-ink-3: #b3a38b;
+  --st-accent: #dbb76d;
+  --st-good: #a3d38e;
+  --st-bad: #ec7a65;
+  --st-setback: #dbb76d;
+  --st-dangerous: #e8913f;
+  --st-deadly: #ec5e4b;
+  --st-r: 3px;
+  --st-gold: #dbb76d;
+  --st-font: "Alegreya Sans", system-ui, sans-serif;
+  --st-font-display: "Cormorant SC", "Alegreya SC", serif;
+  --st-font-data: "Alegreya Sans", system-ui, sans-serif;
+  --st-font-note: "Alegreya", serif;
+}
+
+[data-st-theme="heroic"] .st-tabs {
+  justify-content: center;
+  gap: 18px;
+  background: radial-gradient(ellipse at 50% 120%, #2a2116, #120f0c 70%);
+  border-bottom-color: rgb(219 183 109 / 0.35);
+}
+
+[data-st-theme="heroic"] .st-tabs button {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-family: var(--st-font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+[data-st-theme="heroic"] .st-tabs button.is-active {
+  background: none;
+  color: var(--st-gold);
+  box-shadow: inset 0 -1px 0 var(--st-gold);
+}
+
+[data-st-theme="heroic"] .st-tabs button.is-active::before,
+[data-st-theme="heroic"] .st-tabs button.is-active::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  transform: rotate(45deg);
+  background: var(--st-gold);
+}
+
+/* Двойная оправа: тёмная рамка и внутренняя золотая нить */
+[data-st-theme="heroic"] .st-card,
+[data-st-theme="heroic"] .st-row,
+.ssl-traps-card:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) {
+  border: 1px solid rgb(219 183 109 / 0.42);
+  border-radius: var(--st-r);
+  background: linear-gradient(180deg, #1f1a15, #16120f);
+  box-shadow: inset 0 0 0 3px #110e0b, inset 0 0 0 4px rgb(219 183 109 / 0.16), 0 6px 18px rgb(0 0 0 / 0.45);
+}
+
+[data-st-theme="heroic"] .st-card {
+  padding: 13px 14px 12px;
+  transition: box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1), border-color 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-st-theme="heroic"] .st-card:hover {
+  background: linear-gradient(180deg, #241e17, #19150f);
+  border-color: rgb(219 183 109 / 0.75);
+  box-shadow: inset 0 0 0 3px #110e0b, inset 0 0 0 4px rgb(219 183 109 / 0.32), 0 6px 22px rgb(0 0 0 / 0.5);
+}
+
+[data-st-theme="heroic"] .st-title h3,
+.ssl-traps-card:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) h3 {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #f7e9c9;
+}
+
+[data-st-theme="heroic"] .st-row-head b {
+  font-size: 17px;
+  font-weight: 700;
+  color: #f7e9c9;
+}
+
+/* Медальон */
+[data-st-theme="heroic"] .st-icon,
+.ssl-traps-card:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) header > i {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--st-gold);
+  background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--sev) 28%, #1a1510), #0b0907 78%);
+  box-shadow: 0 0 0 2px #0e0b09, 0 0 0 3px rgb(219 183 109 / 0.35);
+}
+
+/* Самоцвет опасности */
+[data-st-theme="heroic"] .st-sev {
+  gap: 6px;
+  padding-left: 2px;
+  background: none;
+  color: var(--st-ink-2);
+  font-size: 12px;
+}
+
+[data-st-theme="heroic"] .st-sev::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: var(--sev);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--sev) 70%, transparent);
+}
+
+[data-st-theme="heroic"] .st-tag,
+[data-st-theme="heroic"] .st-badge {
+  background: none;
+  box-shadow: inset 0 0 0 1px var(--st-line-soft);
+}
+
+[data-st-theme="heroic"] .st-card footer {
+  border-top: 0;
+  background: linear-gradient(90deg, transparent, rgb(219 183 109 / 0.35), transparent) top / 100% 1px no-repeat;
+}
+
+[data-st-theme="heroic"] .st-btn,
+[data-st-theme="heroic"] .st-icon-btn:hover {
+  border-color: rgb(219 183 109 / 0.5);
+}
+
+.ssl-traps-card:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) {
+  padding: 12px 13px;
+}
+
+.ssl-traps-card:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) .st-targets {
+  border-top: 0;
+  background: linear-gradient(90deg, transparent, rgb(219 183 109 / 0.4), transparent) top / 100% 1px no-repeat;
+}
+
+.ssl-traps-note:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) {
+  border-color: rgb(219 183 109 / 0.35);
+  background: #15120e;
+}
+
+/* Окно Foundry целиком: рамка и шапка в тон панелям */
+.ssl-traps.st-app[data-st-theme="heroic"] {
+  border: 1px solid rgb(219 183 109 / 0.45);
+  background: var(--st-bg);
+  box-shadow: 0 0 0 1px #0b0907, 0 18px 48px rgb(0 0 0 / 0.6);
+}
+
+.ssl-traps.st-app[data-st-theme="heroic"] .window-header {
+  background: linear-gradient(180deg, #1d1813, #13100d);
+  border-bottom: 1px solid rgb(219 183 109 / 0.35);
+  color: var(--st-ink);
+}
+
+.ssl-traps.st-app[data-st-theme="heroic"] .window-header .window-title {
+  font-family: var(--st-font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #f7e9c9;
+}
+
+.ssl-traps.st-app[data-st-theme="heroic"] .window-header .window-icon {
+  color: var(--st-gold);
+}
+
+.ssl-traps.st-app[data-st-theme="heroic"] .window-header :is(button, a) {
+  color: var(--st-ink-2);
+}
+
+.ssl-traps.st-app[data-st-theme="heroic"] .window-header :is(button, a):hover {
+  color: var(--st-gold);
+}
+
+/* Окно настройки */
+[data-st-theme="heroic"] .st-device {
+  border-color: rgb(219 183 109 / 0.42);
+  background: linear-gradient(180deg, #1f1a15, #16120f);
+  box-shadow: inset 0 0 0 3px #110e0b, inset 0 0 0 4px rgb(219 183 109 / 0.16), 0 6px 18px rgb(0 0 0 / 0.4);
+}
+
+[data-st-theme="heroic"] .st-ed-title h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--st-gold);
+}
+
+[data-st-theme="heroic"] .st-ed-title h4::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: linear-gradient(90deg, rgb(219 183 109 / 0.45), transparent);
+}
+
+[data-st-theme="heroic"] .st-ed-name input {
+  color: #f7e9c9;
+}
+
+[data-st-theme="heroic"] .st-seg input:checked + span {
+  border-color: var(--st-gold);
+  background: linear-gradient(180deg, #2c2418, #1d1811);
+  box-shadow: inset 0 0 0 2px #120f0b, inset 0 0 0 3px rgb(219 183 109 / 0.22);
+  color: #f7e9c9;
+}
+
+[data-st-theme="heroic"] .st-group {
+  border-top: 0;
+  background: linear-gradient(90deg, rgb(219 183 109 / 0.32), transparent 80%) top / 100% 1px no-repeat;
+}
+
+[data-st-theme="heroic"] .st-group summary {
+  color: #f7e9c9;
+}
+
+[data-st-theme="heroic"] .st-group summary::before {
+  border-color: var(--st-gold);
+}
+
+[data-st-theme="heroic"] .st-ed-side {
+  border-left-color: rgb(219 183 109 / 0.3);
+  background: radial-gradient(ellipse at 50% 0%, #1d1812, #120f0c 70%);
+}
+
+[data-st-theme="heroic"] .st-ed-flavor {
+  background: linear-gradient(90deg, transparent, rgb(219 183 109 / 0.35), transparent) top / 100% 1px no-repeat;
+}
+
+[data-st-theme="heroic"] .st-ed-actions {
+  border-top-color: rgb(219 183 109 / 0.25);
+}
+
+[data-st-theme="heroic"] .st-btn.is-primary {
+  border-color: var(--st-gold);
+  background: linear-gradient(180deg, #3a2e1c, #241c12);
+  box-shadow: inset 0 0 0 2px #15110c, inset 0 0 0 3px rgb(219 183 109 / 0.28);
+  color: #f7e9c9;
+  font-family: var(--st-font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+[data-st-theme="heroic"] .st-btn.is-primary:hover {
+  background: linear-gradient(180deg, #46371f, #2b2115);
+}
+
+[data-st-theme="heroic"] .st-btn.is-quiet {
+  border-color: transparent;
+}
+
+[data-st-theme="heroic"] .st-btn.is-quiet:not(:disabled):hover {
+  border-color: rgb(219 183 109 / 0.4);
+  color: var(--st-ink);
+}
+
+/* Показать / скрыть: переключатель, кнопка в чате, кнопки на карте */
+[data-st-theme="heroic"] button.st-badge.st-vis {
+  border-color: var(--st-line-soft);
+  background: none;
+  box-shadow: none;
+}
+
+[data-st-theme="heroic"] button.st-badge.st-vis.is-shown {
+  border-color: rgb(219 183 109 / 0.6);
+  background: rgb(219 183 109 / 0.16);
+  color: var(--st-gold);
+}
+
+.ssl-traps-note:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) .st-note-btn {
+  border-color: rgb(219 183 109 / 0.45);
+  background: linear-gradient(180deg, #221c15, #17130f);
+  font-family: var(--st-font);
+}
+
+.ssl-traps.st-map-hud[data-st-theme="heroic"] .st-map-btn {
+  border-color: rgb(219 183 109 / 0.7);
+  background: radial-gradient(circle at 50% 35%, #2a2219, #110e0b 75%);
+}
+
+.ssl-traps.st-map-hud[data-st-theme="heroic"] .st-map-btn.is-shown {
+  background: radial-gradient(circle at 50% 35%, #f0d79c, #c99a4c 80%);
+  color: #17120c;
+}
+
+.ssl-traps.st-map-hud[data-st-theme="heroic"] .st-map-btn.is-noticed {
+  border-color: var(--st-dangerous);
+  color: var(--st-ink);
+}
+
+/* Карточка розыгрыша: кнопки в тон оправе */
+.ssl-traps-card:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) .st-card-btn {
+  border-color: rgb(219 183 109 / 0.45);
+  background: linear-gradient(180deg, #221c15, #17130f);
+  font-family: var(--st-font);
+}
+
+.ssl-traps-card:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) .st-chip {
+  background: rgb(255 255 255 / 0.04);
+  box-shadow: inset 0 0 0 1px var(--st-line-soft);
+}
+
+.ssl-traps-card:is([data-st-theme="heroic"], [data-st-theme="heroic"] *) .st-targets li + li {
+  border-top: 0;
+  background: linear-gradient(90deg, transparent, rgb(219 183 109 / 0.22), transparent) top / 100% 1px no-repeat;
+}

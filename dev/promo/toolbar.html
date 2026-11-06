@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=980">
+  <title>Западня · где кнопка</title>
+  <!-- Картинка для README: где в левой панели Foundry группа «Ловушки». ?lang=en — по-английски. -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/styles/fonts.css">
+  <style>
+    :root { --bg: #1d1b19; --btn: rgb(11 10 19 / 0.82); --line: #4a4655; --ink: #d9d5c5; --ink-2: #b9b3a2; --gold: #e0b45c; --gold-hi: #f2d28f; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); }
+    .shot { position: relative; width: 980px; height: 620px; overflow: hidden; font-family: "Alegreya Sans", system-ui, sans-serif; color: var(--ink);
+      background:
+        linear-gradient(rgb(0 0 0 / 0.35) 1px, transparent 1px) 0 0 / 70px 70px,
+        linear-gradient(90deg, rgb(0 0 0 / 0.35) 1px, transparent 1px) 0 0 / 70px 70px,
+        radial-gradient(ellipse at 70% 40%, #3b3631, #24211e 70%); }
+    .col { position: absolute; top: 28px; display: flex; flex-direction: column; gap: 9px; }
+    .groups { left: 28px; }
+    .tools { left: 90px; }
+    .b { width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 7px; background: var(--btn); color: var(--ink); font-size: 20px; }
+    .b.dim { opacity: 0.55; }
+    .b.ours { border: 2px solid var(--gold); color: var(--gold-hi); background: rgb(70 52 20 / 0.9); outline: 3px solid rgb(224 180 92 / 0.45); outline-offset: 3px; }
+    .b.on { border-color: var(--gold); color: var(--gold-hi); background: rgb(70 52 20 / 0.85); }
+    .labels { position: absolute; top: 28px; left: 152px; display: flex; flex-direction: column; gap: 9px; }
+    .labels span { height: 48px; display: flex; align-items: center; padding: 0 12px; font-size: 19px; color: var(--ink); text-shadow: 0 1px 2px #000; }
+    .labels span b { color: var(--gold-hi); font-weight: 600; margin-right: 8px; }
+    .note { position: absolute; left: 470px; top: 380px; width: 470px; padding: 18px 22px; border: 1px solid rgb(224 180 92 / 0.55); border-radius: 10px; background: rgb(14 12 10 / 0.88); box-shadow: 0 14px 40px rgb(0 0 0 / 0.5); }
+    .note h2 { margin: 0 0 6px; font-family: "Cormorant SC", serif; font-size: 30px; color: var(--gold-hi); letter-spacing: 0.02em; }
+    .note p { margin: 0; font-size: 19px; line-height: 1.4; color: var(--ink-2); }
+    svg.arrow { position: absolute; inset: 0; pointer-events: none; }
+    .brace { position: absolute; left: 146px; top: 28px; width: 3px; height: 276px; border-radius: 2px; background: rgb(224 180 92 / 0.55); }
+  </style>
+</head>
+<body>
+  <div class="shot" id="shot">
+    <!-- Группы левой панели Foundry; «Ловушки» — череп. -->
+    <div class="col groups">
+      <div class="b dim"><i class="fa-solid fa-user"></i></div>
+      <div class="b dim"><i class="fa-solid fa-cubes"></i></div>
+      <div class="b dim"><i class="fa-solid fa-pencil"></i></div>
+      <div class="b dim"><i class="fa-solid fa-dungeon"></i></div>
+      <div class="b dim"><i class="fa-regular fa-lightbulb"></i></div>
+      <div class="b dim"><i class="fa-solid fa-music"></i></div>
+      <div class="b dim"><i class="fa-solid fa-chess-board"></i></div>
+      <div class="b ours"><i class="fa-solid fa-skull-crossbones"></i></div>
+      <div class="b dim"><i class="fa-solid fa-bookmark"></i></div>
+      <div class="b dim"><i class="fa-solid fa-list-ol"></i></div>
+    </div>
+    <!-- Инструменты группы «Ловушки» после нажатия. -->
+    <div class="col tools">
+      <div class="b on"><i class="fa-solid fa-skull-crossbones"></i></div>
+      <div class="b"><i class="fa-solid fa-book-skull"></i></div>
+      <div class="b"><i class="fa-solid fa-feather-pointed"></i></div>
+      <div class="b"><i class="fa-solid fa-map-location-dot"></i></div>
+      <div class="b on"><i class="fa-solid fa-eye"></i></div>
+    </div>
+    <div class="brace"></div>
+    <div class="labels" data-t="labels"></div>
+    <svg class="arrow" viewBox="0 0 980 620" aria-hidden="true">
+      <defs><marker id="head" markerUnits="userSpaceOnUse" markerWidth="26" markerHeight="26" refX="20" refY="13" orient="auto"><path d="M0,0 L26,13 L0,26 z" fill="#ef5a3c"/></marker></defs>
+      <!-- Череп — восьмая кнопка: верх 28 + 7 × 57 = 427, середина 451. -->
+      <path d="M470 470 C 340 470, 220 456, 92 451" fill="none" stroke="#ef5a3c" stroke-width="6" stroke-linecap="round" marker-end="url(#head)"/>
+    </svg>
+    <div class="note">
+      <h2 data-t="title"></h2>
+      <p data-t="text"></p>
+    </div>
+  </div>
+  <script>
+    const TEXT = {
+      ru: {
+        title: "Нажмите на череп",
+        text: "В левой панели Foundry у ведущего — группа «Западня: ловушки». Нажали — открылось окно с библиотекой ловушек; рядом — кнопки её вкладок.",
+        labels: [["1", "Открыть «Западню»"], ["2", "Библиотека"], ["3", "Мои ловушки"], ["4", "Ловушки этой сцены"], ["5", "Кнопки у ловушек на карте"]],
+      },
+      en: {
+        title: "Click the skull",
+        text: "The GM's left Foundry toolbar has a Traps group. Click it and the Trap Library window opens; next to it are buttons for its tabs.",
+        labels: [["1", "Open Trap Library"], ["2", "Library"], ["3", "My traps"], ["4", "Traps on this scene"], ["5", "Buttons on traps on the map"]],
+      },
+    };
+    const lang = new URLSearchParams(location.search).get("lang") === "en" ? "en" : "ru";
+    document.documentElement.lang = lang;
+    const T = TEXT[lang];
+    document.querySelector('[data-t="title"]').textContent = T.title;
+    document.querySelector('[data-t="text"]').textContent = T.text;
+    document.querySelector('[data-t="labels"]').innerHTML = T.labels.map(([n, s]) => `<span><b>${n}</b>${s}</span>`).join("");
+  </script>
+</body>
+</html>

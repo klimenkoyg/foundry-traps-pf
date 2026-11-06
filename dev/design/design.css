@@ -1,0 +1,42 @@
+:root { color-scheme: dark; --bg: #121010; --panel: #1c1916; --line: #3a3128; --ink: #e9e0d0; --muted: #a8998a; --accent: #d9a441; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, sans-serif; }
+.bar { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; align-items: center; padding: 10px 20px; background: #1f1b17ee; backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.bar b { display: block; font-size: 15px; }
+.bar small { color: var(--muted); }
+.bar nav { display: flex; flex-wrap: wrap; gap: 6px; }
+.bar a { padding: 5px 11px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); text-decoration: none; }
+.bar a:hover { border-color: var(--accent); }
+.bar a.is-live { border-color: #6b5426; background: #2c2416; }
+main { padding: 8px 20px 60px; max-width: 1720px; margin: 0 auto; }
+section { padding-top: 22px; }
+h2 { margin: 0 0 4px; font-size: 20px; }
+.lead { margin: 0 0 14px; color: var(--muted); }
+.pair { display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start; }
+figure { margin: 0; }
+figcaption { margin: 0 0 6px; color: var(--muted); font-size: 13px; }
+
+/* Рамка окна Foundry — приблизительно, чтобы видно было, как окно сидит на экране */
+.frame { width: 780px; max-width: calc(100vw - 40px); height: 680px; display: flex; flex-direction: column; border: 1px solid #463e35; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55); }
+.frame .window-header { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px 0 12px; background: #2b251f; border-bottom: 1px solid #463e35; flex: 0 0 auto; }
+.frame .window-header h1 { flex: 1; margin: 0; font-size: 14px; font-weight: 600; }
+.frame .window-header i.fa-xmark { color: #c2b6a5; }
+.frame .window-content { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.frame .window-content > * { flex: 1; min-height: 0; }
+
+/* Чат Foundry — узкая тёмная колонка */
+.chat-columns { display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start; }
+.chat { width: 320px; padding: 8px; display: grid; gap: 8px; background: #191613; border: 1px solid var(--line); border-radius: 8px; }
+.chat .msg { padding: 6px 7px 7px; background: #221e1a; border: 1px solid #2e2823; border-radius: 6px; }
+.chat .msg > header { display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--muted); font-size: 12px; }
+.chat .msg > header .whisper { color: #b48ce6; }
+iframe { width: 100%; height: 1400px; border: 1px solid var(--line); border-radius: 8px; background: #16130f; }
+
+@media (max-width: 760px) {
+  .bar { position: static; padding: 10px 16px; }
+  main { padding: 4px 16px 60px; }
+  .pair, .pair figure { width: 100%; }
+  .frame { width: 100%; max-width: none; height: 640px; }
+  .chat, .chat-columns { width: 100%; }
+}

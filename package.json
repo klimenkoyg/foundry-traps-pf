@@ -1,0 +1,15 @@
+{
+  "name": "ssl_traps_pf2e",
+  "private": true,
+  "type": "module",
+  "description": "Западня PF2e · Trap Library PF2e — ловушки с анимациями для Pathfinder 2e в Foundry VTT",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "check": "node scripts-dev/check.mjs",
+    "build": "node scripts-dev/build.mjs",
+    "sounds": "python3 scripts-dev/gen-sounds.py"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,725 @@
+/* Западня · остальные четыре варианта оформления — только для страницы сравнения
+   (dev/design/themes.html). В модуль идёт «Героический»: styles/theme-heroic.css. */
+
+/* =====================================================================
+   1. ПОДЗЕМЕЛЬЕ — холодный камень и кованое железо, тёплый свет факела.
+      Материал в рамках и пластинах, цифры чистые.
+   ===================================================================== */
+
+:is(.ssl-traps, .ssl-traps-card, .ssl-traps-note):is([data-st-theme="dungeon"], [data-st-theme="dungeon"] *) {
+  --st-bg: #131416;
+  --st-bg-2: #1a1b1e;
+  --st-surface: #222327;
+  --st-surface-2: #2a2b30;
+  --st-line: #4a4b51;
+  --st-line-soft: #34353a;
+  --st-ink: #eeece8;
+  --st-ink-2: #cbc8c1;
+  --st-ink-3: #a6a39c;
+  --st-accent: #eaa43a;
+  --st-good: #8ec97c;
+  --st-bad: #f2705c;
+  --st-setback: #dcab4a;
+  --st-dangerous: #ec8540;
+  --st-deadly: #f26a57;
+  --st-r: 4px;
+  --st-font: "Alegreya Sans", system-ui, sans-serif;
+  --st-font-display: "Alegreya SC", "Alegreya", serif;
+  --st-font-data: "Alegreya Sans", system-ui, sans-serif;
+  --st-font-note: "Alegreya Sans", system-ui, sans-serif;
+}
+
+/* Тёплый отсвет факела сверху окна */
+[data-st-theme="dungeon"] .st-scroll {
+  background: radial-gradient(ellipse 70% 40% at 50% 0%, rgb(234 164 58 / 0.07), transparent 70%), var(--st-bg);
+}
+
+[data-st-theme="dungeon"] .st-tabs {
+  background: linear-gradient(#1f2023, #18191b);
+}
+
+[data-st-theme="dungeon"] .st-tabs button {
+  font-family: var(--st-font-display);
+  font-size: 15px;
+}
+
+[data-st-theme="dungeon"] .st-tabs button.is-active {
+  box-shadow: inset 0 -2px 0 var(--st-accent);
+}
+
+/* Каменная плита: светлая кромка сверху, тень снизу */
+[data-st-theme="dungeon"] .st-card,
+[data-st-theme="dungeon"] .st-row,
+.ssl-traps-card:is([data-st-theme="dungeon"], [data-st-theme="dungeon"] *) {
+  background: linear-gradient(180deg, #27282c, #1f2023);
+  border-color: #3a3b40;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), inset 0 -1px 0 rgb(0 0 0 / 0.4), 0 2px 0 rgb(0 0 0 / 0.45);
+}
+
+[data-st-theme="dungeon"] .st-card:hover {
+  background: linear-gradient(180deg, #2e2f34, #242528);
+  border-color: var(--st-line);
+}
+
+[data-st-theme="dungeon"] .st-title h3,
+.ssl-traps-card:is([data-st-theme="dungeon"], [data-st-theme="dungeon"] *) h3 {
+  font-size: 17px;
+  letter-spacing: 0.01em;
+}
+
+[data-st-theme="dungeon"] .st-row-head b {
+  font-size: 15.5px;
+}
+
+/* Кованая пластина с заклёпками по углам */
+[data-st-theme="dungeon"] .st-icon,
+.ssl-traps-card:is([data-st-theme="dungeon"], [data-st-theme="dungeon"] *) header > i {
+  border: 0;
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 3px 3px, #7b7d83 1.4px, transparent 1.8px),
+    radial-gradient(circle at calc(100% - 3px) 3px, #7b7d83 1.4px, transparent 1.8px),
+    radial-gradient(circle at 3px calc(100% - 3px), #7b7d83 1.4px, transparent 1.8px),
+    radial-gradient(circle at calc(100% - 3px) calc(100% - 3px), #7b7d83 1.4px, transparent 1.8px),
+    linear-gradient(160deg, #3a3c41, #1b1c1f);
+  box-shadow: inset 0 0 0 1px #54565c, inset 0 1px 0 rgb(255 255 255 / 0.12), 0 1px 2px rgb(0 0 0 / 0.6);
+  color: var(--sev);
+}
+
+/* Железная бирка с заклёпкой */
+[data-st-theme="dungeon"] .st-sev {
+  gap: 5px;
+  border-radius: 3px;
+  background: #18191b;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sev) 45%, transparent);
+  color: color-mix(in srgb, var(--sev) 82%, var(--st-ink));
+}
+
+[data-st-theme="dungeon"] .st-sev::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--sev);
+}
+
+[data-st-theme="dungeon"] .st-tag,
+[data-st-theme="dungeon"] .st-badge {
+  background: #18191b;
+}
+
+/* =====================================================================
+   2. ЧЕРТЁЖ — записки мастера ловушек: синька, сетка, штамп, пометки от руки.
+   ===================================================================== */
+
+:is(.ssl-traps, .ssl-traps-card, .ssl-traps-note):is([data-st-theme="blueprint"], [data-st-theme="blueprint"] *) {
+  --st-bg: #0e2849;
+  --st-bg-2: #0b2240;
+  --st-surface: #12315a;
+  --st-surface-2: #173a68;
+  --st-line: #7d9fcf;
+  --st-line-soft: #2c5185;
+  --st-ink: #f2f7ff;
+  --st-ink-2: #cddbf0;
+  --st-ink-3: #a6bddf;
+  --st-accent: #ffd46a;
+  --st-good: #86e3ad;
+  --st-bad: #ff9a8a;
+  --st-setback: #ffd46a;
+  --st-dangerous: #ffab66;
+  --st-deadly: #ff8577;
+  --st-r: 0px;
+  --st-font: "IBM Plex Sans", "PT Sans", system-ui, sans-serif;
+  --st-font-display: "PT Sans Narrow", "Arial Narrow", sans-serif;
+  --st-font-data: "IBM Plex Mono", ui-monospace, monospace;
+  --st-font-note: "Caveat", cursive;
+}
+
+/* Миллиметровка: мелкая клетка и крупная */
+[data-st-theme="blueprint"] .st-scroll,
+.ssl-traps-card:is([data-st-theme="blueprint"], [data-st-theme="blueprint"] *) {
+  background-color: var(--st-bg);
+  background-image:
+    linear-gradient(rgb(170 200 240 / 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(170 200 240 / 0.12) 1px, transparent 1px),
+    linear-gradient(rgb(170 200 240 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(170 200 240 / 0.05) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+}
+
+[data-st-theme="blueprint"] .st-tabs {
+  background: var(--st-bg-2);
+  border-bottom-color: var(--st-line);
+}
+
+[data-st-theme="blueprint"] .st-tabs button {
+  border-radius: 0;
+  font-family: var(--st-font-data);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+}
+
+[data-st-theme="blueprint"] .st-tabs button.is-active {
+  border-color: var(--st-line);
+  border-bottom-color: var(--st-bg);
+}
+
+[data-st-theme="blueprint"] .st-tabs button.is-active::before {
+  content: "[";
+  color: var(--st-accent);
+}
+
+[data-st-theme="blueprint"] .st-tabs button.is-active::after {
+  content: "]";
+  color: var(--st-accent);
+}
+
+[data-st-theme="blueprint"] .st-toolbar select,
+[data-st-theme="blueprint"] .st-toolbar input,
+[data-st-theme="blueprint"] .st-btn,
+[data-st-theme="blueprint"] .st-icon-btn {
+  border-radius: 0;
+  font-family: var(--st-font-data);
+  font-size: 12px;
+}
+
+/* Лист чертежа: рамка с отступом, как поле листа */
+[data-st-theme="blueprint"] .st-card,
+[data-st-theme="blueprint"] .st-row,
+.ssl-traps-card:is([data-st-theme="blueprint"], [data-st-theme="blueprint"] *) {
+  border-radius: 0;
+  border: 1px solid rgb(205 222 245 / 0.75);
+  outline: 1px solid rgb(205 222 245 / 0.22);
+  outline-offset: 3px;
+  background-color: rgb(18 49 90 / 0.92);
+}
+
+[data-st-theme="blueprint"] .st-card:hover {
+  background-color: rgb(23 58 104 / 0.96);
+  border-color: var(--st-ink);
+}
+
+[data-st-theme="blueprint"] .st-grid {
+  gap: 16px;
+}
+
+[data-st-theme="blueprint"] .st-title h3,
+[data-st-theme="blueprint"] .st-row-head b,
+.ssl-traps-card:is([data-st-theme="blueprint"], [data-st-theme="blueprint"] *) h3 {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+[data-st-theme="blueprint"] .st-icon,
+.ssl-traps-card:is([data-st-theme="blueprint"], [data-st-theme="blueprint"] *) header > i {
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--st-ink-2);
+  color: var(--st-ink);
+}
+
+[data-st-theme="blueprint"] .st-sev,
+[data-st-theme="blueprint"] .st-tag,
+[data-st-theme="blueprint"] .st-badge {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px currentColor;
+  font-family: var(--st-font-data);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+}
+
+[data-st-theme="blueprint"] .st-sev {
+  color: var(--sev);
+}
+
+/* Пометка ведущего — от руки, жёлтым карандашом */
+[data-st-theme="blueprint"] .st-text {
+  font-size: 18px;
+  line-height: 1.12;
+  color: #ffe6a3;
+}
+
+/* Штамп: таблица характеристик с тонкими линиями */
+[data-st-theme="blueprint"] .st-stats {
+  gap: 1px;
+  background: rgb(205 222 245 / 0.35);
+  border: 1px solid rgb(205 222 245 / 0.35);
+}
+
+[data-st-theme="blueprint"] .st-stats div {
+  padding: 3px 6px;
+  background: var(--st-surface);
+}
+
+[data-st-theme="blueprint"] .st-stats dt {
+  font-family: var(--st-font-data);
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  color: var(--st-ink-3);
+}
+
+[data-st-theme="blueprint"] .st-stats dt i {
+  display: none;
+}
+
+[data-st-theme="blueprint"] .st-stats dd {
+  font-size: 12px;
+}
+
+[data-st-theme="blueprint"] .st-card footer {
+  font-family: var(--st-font-data);
+  font-size: 10.5px;
+  border-top-style: dashed;
+  border-top-color: rgb(205 222 245 / 0.35);
+}
+
+[data-st-theme="blueprint"] .st-row-stats {
+  font-family: var(--st-font-data);
+  font-size: 11.5px;
+}
+
+.ssl-traps-card:is([data-st-theme="blueprint"], [data-st-theme="blueprint"] *) .st-flavor {
+  font-size: 19px;
+  line-height: 1.1;
+  font-style: normal;
+  color: #ffe6a3;
+}
+
+[data-st-theme="blueprint"] .st-meta,
+[data-st-theme="blueprint"] .st-chips {
+  font-family: var(--st-font-data);
+}
+
+[data-st-theme="blueprint"] .st-roll,
+[data-st-theme="blueprint"] .st-dmg,
+[data-st-theme="blueprint"] .st-cond {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px currentColor;
+  font-size: 11px;
+}
+
+[data-st-theme="blueprint"] .st-targets {
+  border-top-style: dashed;
+}
+
+.ssl-traps-note:is([data-st-theme="blueprint"], [data-st-theme="blueprint"] *) {
+  border-radius: 0;
+  background: var(--st-bg);
+  border-color: rgb(205 222 245 / 0.6);
+  font-family: var(--st-font-data);
+  font-size: 12px;
+}
+
+/* =====================================================================
+   4. ГРАВЮРА — чернь, кость и кровь: тяжёлые линии, старая печать.
+   ===================================================================== */
+
+:is(.ssl-traps, .ssl-traps-card, .ssl-traps-note):is([data-st-theme="engraving"], [data-st-theme="engraving"] *) {
+  --st-bg: #0b0a09;
+  --st-bg-2: #110f0d;
+  --st-surface: #171412;
+  --st-surface-2: #1f1b18;
+  --st-line: #554337;
+  --st-line-soft: #2e251f;
+  --st-ink: #ede4d3;
+  --st-ink-2: #c9bda9;
+  --st-ink-3: #a39683;
+  --st-accent: #ea5143;
+  --st-good: #b2c495;
+  --st-bad: #ec5a45;
+  --st-setback: #c2ae84;
+  --st-dangerous: #dc803f;
+  --st-deadly: #ec4a3b;
+  --st-r: 0px;
+  --st-font: "Alegreya", serif;
+  --st-font-display: "Kurale", "Alegreya SC", serif;
+  --st-font-data: "Alegreya Sans", system-ui, sans-serif;
+  --st-font-note: "Alegreya", serif;
+}
+
+/* Виньетка по краям поля */
+[data-st-theme="engraving"] .st-scroll {
+  background: radial-gradient(ellipse at 50% 30%, #15120f, #070605 85%);
+}
+
+[data-st-theme="engraving"] .st-tabs {
+  background: #090807;
+  border-bottom: 2px solid #2c231d;
+}
+
+[data-st-theme="engraving"] .st-tabs button {
+  border-radius: 0;
+  font-family: var(--st-font-display);
+  font-size: 16px;
+}
+
+[data-st-theme="engraving"] .st-tabs button.is-active {
+  background: var(--st-surface);
+  border: 2px solid #2c231d;
+  border-bottom-color: var(--st-surface);
+  margin-bottom: -2px;
+}
+
+/* Двойная гравированная линия */
+[data-st-theme="engraving"] .st-card,
+[data-st-theme="engraving"] .st-row,
+.ssl-traps-card:is([data-st-theme="engraving"], [data-st-theme="engraving"] *) {
+  border-radius: 0;
+  border: 2px solid #2c231d;
+  background: var(--st-surface);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #4a3a2f, 0 8px 20px rgb(0 0 0 / 0.55);
+}
+
+[data-st-theme="engraving"] .st-card:hover {
+  background: var(--st-surface-2);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #6e5545, 0 8px 20px rgb(0 0 0 / 0.55);
+}
+
+/* Смертельные — кровавая нить внутри */
+[data-st-theme="engraving"] .st-card[data-severity="deadly"],
+.ssl-traps-card[data-severity="deadly"]:is([data-st-theme="engraving"], [data-st-theme="engraving"] *) {
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #8c2a20, 0 8px 20px rgb(0 0 0 / 0.55);
+}
+
+/* Штриховка шапки — как резец по дереву */
+[data-st-theme="engraving"] .st-card header,
+.ssl-traps-card:is([data-st-theme="engraving"], [data-st-theme="engraving"] *) header {
+  margin: -10px -12px 0;
+  padding: 10px 12px 8px;
+  background: repeating-linear-gradient(135deg, rgb(237 228 211 / 0.05) 0 1px, transparent 1px 5px);
+  border-bottom: 1px solid #2e251f;
+}
+
+.ssl-traps-card:is([data-st-theme="engraving"], [data-st-theme="engraving"] *) header {
+  margin: -10px -11px 0;
+  padding: 10px 11px 8px;
+}
+
+[data-st-theme="engraving"] .st-title h3,
+[data-st-theme="engraving"] .st-row-head b,
+.ssl-traps-card:is([data-st-theme="engraving"], [data-st-theme="engraving"] *) h3 {
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+[data-st-theme="engraving"] .st-icon,
+.ssl-traps-card:is([data-st-theme="engraving"], [data-st-theme="engraving"] *) header > i {
+  border-radius: 0;
+  border: 1px solid color-mix(in srgb, var(--sev) 60%, #000);
+  background: #0a0908;
+  box-shadow: inset 0 0 0 2px #0a0908, inset 0 0 0 3px color-mix(in srgb, var(--sev) 25%, transparent);
+}
+
+[data-st-theme="engraving"] .st-sev {
+  border-radius: 0;
+  background: none;
+  padding: 0;
+  font-family: "Alegreya SC", serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--sev);
+}
+
+[data-st-theme="engraving"] .st-tag,
+[data-st-theme="engraving"] .st-badge {
+  border-radius: 0;
+  background: #0d0b0a;
+  box-shadow: inset 0 0 0 1px #2e251f;
+}
+
+[data-st-theme="engraving"] .st-text {
+  font-size: 13.5px;
+  font-style: italic;
+}
+
+[data-st-theme="engraving"] .st-stats dt {
+  font-family: "Alegreya SC", serif;
+  font-size: 13px;
+}
+
+[data-st-theme="engraving"] .st-card footer {
+  border-top: 1px solid #2e251f;
+  font-family: "Alegreya SC", serif;
+  font-size: 12.5px;
+}
+
+[data-st-theme="engraving"] .st-icon-btn,
+[data-st-theme="engraving"] .st-btn,
+[data-st-theme="engraving"] .st-toolbar select,
+[data-st-theme="engraving"] .st-toolbar input {
+  border-radius: 0;
+}
+
+[data-st-theme="engraving"] .st-roll,
+[data-st-theme="engraving"] .st-dmg,
+[data-st-theme="engraving"] .st-cond {
+  border-radius: 0;
+  background: #0d0b0a;
+}
+
+.ssl-traps-card:is([data-st-theme="engraving"], [data-st-theme="engraving"] *) .st-flavor {
+  font-size: 14.5px;
+}
+
+.ssl-traps-note:is([data-st-theme="engraving"], [data-st-theme="engraving"] *) {
+  border-radius: 0;
+  border: 2px solid #2c231d;
+  background: var(--st-surface);
+  font-style: italic;
+}
+
+/* =====================================================================
+   5. СПРАВОЧНИК — строгий инструмент: свод правил, плотный список, родной для Foundry.
+      Светлый по умолчанию, тёмный — внутри тёмной темы Foundry (.theme-dark).
+   ===================================================================== */
+
+:is(.ssl-traps, .ssl-traps-card, .ssl-traps-note):is([data-st-theme="reference"], [data-st-theme="reference"] *) {
+  --st-bg: #f3f3f2;
+  --st-bg-2: #e8e8e6;
+  --st-surface: #ffffff;
+  --st-surface-2: #f7f7f6;
+  --st-line: #cfcfcb;
+  --st-line-soft: #e4e4e1;
+  --st-ink: #1b1b1d;
+  --st-ink-2: #414146;
+  --st-ink-3: #5f5f66;
+  --st-accent: #b3261e;
+  --st-good: #256b2d;
+  --st-bad: #b3261e;
+  --st-setback: #8a5d00;
+  --st-dangerous: #a83e06;
+  --st-deadly: #b3261e;
+  --st-r: 6px;
+  --st-font: "PT Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --st-font-display: var(--st-font);
+  --st-font-data: var(--st-font);
+  --st-font-note: var(--st-font);
+}
+
+.theme-dark :is(.ssl-traps, .ssl-traps-card, .ssl-traps-note):is([data-st-theme="reference"], [data-st-theme="reference"] *) {
+  --st-bg: #1c1d20;
+  --st-bg-2: #232428;
+  --st-surface: #2a2b30;
+  --st-surface-2: #313238;
+  --st-line: #45464d;
+  --st-line-soft: #36373d;
+  --st-ink: #eeeef0;
+  --st-ink-2: #c6c6cc;
+  --st-ink-3: #a2a2aa;
+  --st-accent: #ff7b6e;
+  --st-good: #7fcf88;
+  --st-bad: #ff7b6e;
+  --st-setback: #e7b54d;
+  --st-dangerous: #f39255;
+  --st-deadly: #ff7b6e;
+}
+
+[data-st-theme="reference"] .st-tabs {
+  background: var(--st-bg-2);
+}
+
+[data-st-theme="reference"] .st-tabs button.is-active {
+  background: var(--st-bg);
+  box-shadow: inset 0 -2px 0 var(--st-accent);
+  font-weight: 700;
+}
+
+/* Библиотека — плотный список строк, а не сетка карточек */
+[data-st-theme="reference"] .st-grid {
+  grid-template-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--st-line);
+  border-radius: var(--st-r);
+  overflow: hidden;
+  background: var(--st-surface);
+}
+
+[data-st-theme="reference"] .st-card {
+  display: grid;
+  grid-template-columns: minmax(210px, 1fr) minmax(0, 1.45fr);
+  grid-template-areas: "head stats" "text stats" "foot stats";
+  align-items: start;
+  gap: 4px 18px;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--st-line-soft);
+  border-radius: 0;
+  background: var(--st-surface);
+}
+
+[data-st-theme="reference"] .st-card:last-child {
+  border-bottom: 0;
+}
+
+[data-st-theme="reference"] .st-card:hover {
+  background: var(--st-surface-2);
+  border-color: var(--st-line-soft);
+}
+
+[data-st-theme="reference"] .st-card header {
+  grid-area: head;
+}
+
+[data-st-theme="reference"] .st-text {
+  grid-area: text;
+  -webkit-line-clamp: 2;
+  font-size: 12.5px;
+  color: var(--st-ink-2);
+}
+
+[data-st-theme="reference"] .st-stats {
+  grid-area: stats;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px 16px;
+  padding-top: 2px;
+}
+
+[data-st-theme="reference"] .st-stats div {
+  flex-direction: column;
+  gap: 0;
+}
+
+[data-st-theme="reference"] .st-stats dt {
+  font-size: 11.5px;
+  color: var(--st-ink-3);
+}
+
+[data-st-theme="reference"] .st-stats dd {
+  text-align: left;
+  font-weight: 700;
+  font-size: 12.5px;
+}
+
+[data-st-theme="reference"] .st-card footer {
+  grid-area: foot;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--st-ink-3);
+}
+
+[data-st-theme="reference"] .st-icon,
+.ssl-traps-card:is([data-st-theme="reference"], [data-st-theme="reference"] *) header > i {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--sev) 12%, var(--st-surface));
+  color: var(--sev);
+  font-size: 14px;
+}
+
+[data-st-theme="reference"] .st-title h3 {
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+/* Опасность — точка и подпись, без заливки */
+[data-st-theme="reference"] .st-sev {
+  gap: 5px;
+  padding: 0;
+  background: none;
+  color: var(--sev);
+  font-weight: 700;
+}
+
+[data-st-theme="reference"] .st-sev::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+[data-st-theme="reference"] .st-tag,
+[data-st-theme="reference"] .st-badge {
+  background: var(--st-bg-2);
+  color: var(--st-ink-2);
+}
+
+[data-st-theme="reference"] .st-badge.is-armed {
+  background: color-mix(in srgb, var(--st-bad) 12%, var(--st-surface));
+  color: var(--st-bad);
+}
+
+[data-st-theme="reference"] .st-badge.is-off {
+  background: color-mix(in srgb, var(--st-good) 12%, var(--st-surface));
+  color: var(--st-good);
+}
+
+[data-st-theme="reference"] .st-list {
+  gap: 0;
+  border: 1px solid var(--st-line);
+  border-radius: var(--st-r);
+  overflow: hidden;
+}
+
+[data-st-theme="reference"] .st-row {
+  border: 0;
+  border-bottom: 1px solid var(--st-line-soft);
+  border-radius: 0;
+  background: var(--st-surface);
+}
+
+[data-st-theme="reference"] .st-row.is-off {
+  background: var(--st-surface-2);
+}
+
+[data-st-theme="reference"] .st-row-head b {
+  font-weight: 700;
+}
+
+[data-st-theme="reference"] .st-toolbar select,
+[data-st-theme="reference"] .st-toolbar input,
+[data-st-theme="reference"] .st-btn {
+  background: var(--st-surface);
+}
+
+/* Карточка чата — как блок правил: красная линейка под шапкой */
+.ssl-traps-card:is([data-st-theme="reference"], [data-st-theme="reference"] *) {
+  background: var(--st-surface);
+  border-color: var(--st-line);
+  border-radius: var(--st-r);
+}
+
+.ssl-traps-card:is([data-st-theme="reference"], [data-st-theme="reference"] *) header {
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--st-accent);
+}
+
+.ssl-traps-card:is([data-st-theme="reference"], [data-st-theme="reference"] *) h3 {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ssl-traps-card:is([data-st-theme="reference"], [data-st-theme="reference"] *) .st-flavor {
+  font-style: italic;
+  color: var(--st-ink-2);
+}
+
+[data-st-theme="reference"] .st-roll,
+[data-st-theme="reference"] .st-dmg,
+[data-st-theme="reference"] .st-cond {
+  background: var(--st-bg-2);
+  font-weight: 700;
+}
+
+.ssl-traps-note:is([data-st-theme="reference"], [data-st-theme="reference"] *) {
+  background: var(--st-surface);
+  border-color: var(--st-line);
+  color: var(--st-ink);
+}
+
+/* Узкое окно: строка справочника складывается в столбик */
+@container (max-width: 560px) {
+  [data-st-theme="reference"] .st-card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "head" "text" "stats" "foot";
+  }
+}

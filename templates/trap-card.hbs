@@ -1,0 +1,34 @@
+<article class="st-card{{#if preview}} is-preview{{/if}}" draggable="true" {{#unless preview}}data-action="edit"{{/unless}} data-trap="{{id}}" data-severity="{{severity}}" data-magical="{{magical}}" data-damage="{{damageTypes}}" data-search="{{search}}">
+  <header>
+    <span class="st-icon" data-severity="{{severity}}"><i class="{{icon}}" inert></i></span>
+    <div class="st-title">
+      <h3>{{name}}</h3>
+      <div class="st-tags">
+        <span class="st-sev" data-severity="{{severity}}">{{severityLabel}}</span>
+        {{#if magical}}<span class="st-tag"><i class="fa-solid fa-wand-sparkles" inert></i> {{localize "TRAPS.Kind.magical"}}</span>{{/if}}
+        {{#if custom}}<span class="st-tag is-custom">{{localize "TRAPS.App.custom"}}</span>{{/if}}
+      </div>
+    </div>
+    {{#unless preview}}
+    <div class="st-card-tools">
+      <button type="button" class="st-icon-btn" data-action="edit" data-tooltip="{{localize "TRAPS.Editor.open"}}" aria-label="{{localize "TRAPS.Editor.open"}}"><i class="fa-solid fa-sliders" inert></i></button>
+    </div>
+    {{/unless}}
+  </header>
+  {{#if text}}<p class="st-text">{{text}}</p>{{/if}}
+  <dl class="st-stats">
+    {{#each stats}}<div data-stat="{{key}}"><dt><i class="fa-solid {{icon}}" inert></i> {{label}}</dt><dd>{{value}}</dd></div>{{/each}}
+  </dl>
+  <footer>
+    <span><i class="fa-solid fa-vector-square" inert></i> {{area}}</span>
+    <span>{{affects}}</span>
+    <span>{{rearm}}</span>
+    {{#if activation}}<span class="st-card-activation"><i class="fa-solid {{#if manual}}fa-hand-pointer{{else}}fa-shoe-prints{{/if}}" inert></i> {{activation}}</span>{{/if}}
+    {{#if custom}}{{#unless preview}}
+    <span class="st-card-own">
+      <button type="button" class="st-icon-btn" data-action="renameCustom" data-tooltip="{{localize "TRAPS.App.renameCustom"}}" aria-label="{{localize "TRAPS.App.renameCustom"}}"><i class="fa-solid fa-pen" inert></i></button>
+      <button type="button" class="st-icon-btn is-danger" data-action="deleteCustom" data-tooltip="{{localize "TRAPS.App.deleteCustom"}}" aria-label="{{localize "TRAPS.App.deleteCustom"}}"><i class="fa-solid fa-trash" inert></i></button>
+    </span>
+    {{/unless}}{{/if}}
+  </footer>
+</article>

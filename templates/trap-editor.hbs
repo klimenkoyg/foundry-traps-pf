@@ -1,0 +1,75 @@
+<div class="st-ed-form" data-mode="{{mode}}">
+  <div class="st-scroll">
+    <header class="st-ed-head">
+      <span class="st-icon" data-severity="{{severity}}"><i class="{{icon}}" inert></i></span>
+      <div class="st-ed-head-main">
+        <label class="st-ed-name">
+          <span class="st-sr">{{localize "TRAPS.Editor.name"}}</span>
+          <input type="text" name="name" value="{{name}}" placeholder="{{localize "TRAPS.Editor.name"}}" autocomplete="off">
+        </label>
+        <div class="st-ed-head-row">
+          <div class="st-seg st-seg-sev" role="radiogroup" aria-label="{{localize "TRAPS.Behavior.FIELDS.severity.label"}}">
+            {{#each severities}}
+            <label data-severity="{{value}}"><input type="radio" name="severity" value="{{value}}" {{#if checked}}checked{{/if}}><span>{{label}}</span></label>
+            {{/each}}
+          </div>
+          <label class="st-check"><input type="checkbox" name="magical" {{#if magical}}checked{{/if}}><span>{{localize "TRAPS.Behavior.FIELDS.magical.label"}}</span></label>
+        </div>
+      </div>
+    </header>
+
+    {{#if device}}
+    <section class="st-device" aria-labelledby="{{uid}}-device">
+      <div class="st-ed-title">
+        <h4 id="{{uid}}-device">{{localize "TRAPS.Device.title"}}</h4>
+        <p>{{localize "TRAPS.Device.hint"}}</p>
+      </div>
+      {{#each device.params}}
+      <div class="st-param" data-param="{{key}}">
+        <div class="st-param-head">
+          <span class="st-param-label" id="{{../uid}}-{{key}}">{{label}}</span>
+          {{#if isRange}}<output data-output="{{key}}">{{display}}</output>{{/if}}
+        </div>
+        {{#if isRange}}
+        <input type="range" name="opt.{{key}}" min="{{min}}" max="{{max}}" step="{{step}}" value="{{value}}" aria-labelledby="{{../uid}}-{{key}}" style="--fill: {{fill}}%">
+        <div class="st-range-scale" aria-hidden="true"><span>{{minLabel}}</span><span>{{maxLabel}}</span></div>
+        {{/if}}
+        {{#if isSeg}}
+        <div class="st-seg" role="radiogroup" aria-labelledby="{{../uid}}-{{key}}">
+          {{#each options}}
+          <label><input type="radio" name="opt.{{../key}}" value="{{value}}" {{#if checked}}checked{{/if}}><span>{{label}}</span></label>
+          {{/each}}
+        </div>
+        {{/if}}
+        {{#if isToggle}}
+        <div class="st-seg" role="radiogroup" aria-labelledby="{{../uid}}-{{key}}">
+          <label><input type="radio" name="opt.{{key}}" value="false" {{#unless value}}checked{{/unless}}><span>{{localize "TRAPS.Device.no"}}</span></label>
+          <label><input type="radio" name="opt.{{key}}" value="true" {{#if value}}checked{{/if}}><span>{{localize "TRAPS.Device.yes"}}</span></label>
+        </div>
+        {{/if}}
+        <p class="st-effect" data-effect="{{key}}">{{#each chips}}<span>{{this}}</span>{{/each}}</p>
+      </div>
+      {{/each}}
+    </section>
+    {{/if}}
+
+    {{#each groups}}
+    <details class="st-group" data-group="{{id}}" {{#if open}}open{{/if}}>
+      <summary><span>{{label}}</span></summary>
+      <div class="st-fields">
+        {{#each fields}}
+        <label class="st-field{{#if wide}} is-wide{{/if}}{{#if isCheck}} is-check{{/if}}{{#if device}} is-device{{/if}}" {{#if show}}data-show="{{show}}"{{/if}}>
+          <span class="st-field-label">{{label}}{{#if device}} <i class="fa-solid fa-gear" data-tooltip="{{localize "TRAPS.Device.controlled"}}" aria-label="{{localize "TRAPS.Device.controlled"}}"></i>{{/if}}</span>
+          {{#if isSelect}}<select name="{{name}}">{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>{{/if}}
+          {{#if isNumber}}<input type="number" name="{{name}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}" inputmode="numeric">{{/if}}
+          {{#if isText}}<input type="text" name="{{name}}" value="{{value}}" placeholder="{{placeholder}}" spellcheck="false" autocomplete="off">{{/if}}
+          {{#if isCheck}}<input type="checkbox" name="{{name}}" {{#if value}}checked{{/if}}>{{/if}}
+          {{#if isArea}}<textarea name="{{name}}" rows="3">{{value}}</textarea>{{/if}}
+          {{#if hint}}<small>{{hint}}</small>{{/if}}
+        </label>
+        {{/each}}
+      </div>
+    </details>
+    {{/each}}
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Западня · анимации</title>
+  <style>
+    :root { color-scheme: dark; --bg: #16130f; --panel: #221d17; --line: #3a3128; --ink: #e9e0d0; --muted: #a8998a; --accent: #d9a441; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.4 system-ui, sans-serif; }
+    header { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); }
+    header b { font-size: 15px; margin-right: 8px; }
+    label { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); }
+    select, button { background: #2d261e; color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; font: inherit; }
+    button { cursor: pointer; }
+    button:hover { border-color: var(--accent); }
+    main { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; padding: 16px; }
+    figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    figure canvas { display: block; width: 100%; aspect-ratio: 1; cursor: pointer; }
+    figcaption { display: flex; justify-content: space-between; padding: 8px 10px; color: var(--muted); }
+    figcaption b { color: var(--ink); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header>
+    <b>Западня · встроенные анимации</b>
+    <label>Область <select id="area"><option value="1">1×1</option><option value="2" selected>2×2</option><option value="3">3×3</option></select></label>
+    <label>Клетка <select id="cell"><option>70</option><option selected>100</option><option>140</option></select> px</label>
+    <label><input type="checkbox" id="loop" checked> по кругу</label>
+    <button type="button" id="all">Запустить все</button>
+    <small style="color: var(--muted)">Щелчок по картинке — повторить эффект.</small>
+  </header>
+  <main id="grid"></main>
+  <script type="module" src="preview.js"></script>
+</body>
+</html>

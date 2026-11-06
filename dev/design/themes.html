@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Западня · пять оформлений</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&family=Alegreya+SC:wght@500;700&family=Alegreya+Sans:wght@400;500;700&family=Caveat:wght@500;600&family=Cormorant+SC:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=Kurale&family=PT+Sans:ital,wght@0,400;0,700;1,400&family=PT+Sans+Narrow:wght@700&display=swap">
+  <!-- Стили — без кеша, чтобы правки были видны сразу -->
+  <script>for (const href of ["/styles/traps.css", "/styles/theme-heroic.css", "variants.css", "themes.css"]) document.write(`<link rel="stylesheet" href="${href}?t=${Date.now()}">`);</script>
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-title">
+      <b>Западня · пять оформлений</b>
+      <small>Одна и та же разметка модуля, пять тем. Шрифты и цвета — те, что поедут в модуль.</small>
+    </div>
+    <nav id="switch" aria-label="Оформление"></nav>
+  </header>
+
+  <main>
+    <section id="compare">
+      <h2>Рядом</h2>
+      <p class="lead">Одна ловушка в библиотеке и одна карточка в чате — во всех пяти вариантах.</p>
+      <div class="compare" id="compare-grid"></div>
+    </section>
+
+    <section id="detail">
+      <div class="detail-head">
+        <div>
+          <h2 id="detail-name"></h2>
+          <p class="lead" id="detail-idea"></p>
+        </div>
+        <label class="dark-toggle" id="dark-toggle" hidden><input type="checkbox" id="dark"> Тёмная тема Foundry</label>
+      </div>
+      <dl class="facts" id="detail-facts"></dl>
+      <div class="swatches" id="detail-swatches"></div>
+      <div class="detail-body" id="detail-body">
+        <figure><figcaption>Библиотека</figcaption><div class="frame" id="win-library"></div></figure>
+        <figure><figcaption>На этой сцене</figcaption><div class="frame" id="win-scene"></div></figure>
+        <figure><figcaption>Чат</figcaption><div class="chat" id="detail-chat"></div></figure>
+      </div>
+    </section>
+  </main>
+
+  <div id="windows" hidden></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+  <script src="/dev/harness/foundry-mock.js"></script>
+  <script type="module" src="themes.js"></script>
+</body>
+</html>

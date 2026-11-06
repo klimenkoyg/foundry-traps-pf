@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+dist/
+*.zip
+__pycache__/
+
+# локальные настройки редакторов и ассистентов (пути к домашней папке)
+.claude/
+.cursor/
+.gemini/

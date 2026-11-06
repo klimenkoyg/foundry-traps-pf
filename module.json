@@ -1,0 +1,73 @@
+{
+  "id": "ssl_traps_pf2e",
+  "title": "Западня PF2e · Trap Library PF2e",
+  "description": "<p>Библиотека ловушек для Pathfinder 2e с анимациями и звуками. Ведущий перетаскивает ловушку на карту — она встаёт скрытой областью и срабатывает, когда на неё наступает персонаж: эффект, спасбросок или атака по четырём степеням успеха, урон с иммунитетами, слабостями и сопротивлениями, продолжительный урон, состояние со значением и карточка в чате. Тайная проверка Внимательности против Скрытности с учётом ранга и «Поиска», «Обезвредить устройство» с несколькими успехами, уровень ловушки и опыт под уровень партии по таблицам GM Core, свои ловушки в библиотеке. Свои анимации и звуки работают без сторонних модулей; с Sequencer и JB2A — их эффекты.</p><p>A trap library for Pathfinder 2e with animations and sounds. The GM drags a trap onto the map — it becomes a hidden region that fires when a character steps in: an effect, a save or an attack with four degrees of success, damage with immunities, weaknesses and resistances, persistent damage, a valued condition and a chat card. Secret Perception against Stealth with proficiency ranks and Searching, Disable a Device with multiple successes, trap level and XP scaled to the party by the GM Core tables, custom traps in the library. Built-in animations and sounds need no other modules; with Sequencer and JB2A, their effects are used. Russian and English.</p>",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "Yuriy Klimenko",
+      "url": "https://github.com/klimenkoyg"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14.370"
+  },
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/fonts.css",
+    "styles/traps.css",
+    "styles/theme-heroic.css"
+  ],
+  "languages": [
+    {
+      "lang": "ru",
+      "name": "Русский",
+      "path": "lang/ru.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "socket": true,
+  "documentTypes": {
+    "RegionBehavior": {
+      "trap": {},
+      "activator": {}
+    }
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "pf2e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "7.0.0"
+        }
+      }
+    ],
+    "recommends": [
+      {
+        "id": "sequencer",
+        "type": "module",
+        "reason": "По желанию: эффекты JB2A вместо встроенных анимаций. / Optional: JB2A effects instead of the built-in animations."
+      },
+      {
+        "id": "JB2A_DnD5e",
+        "type": "module",
+        "reason": "По желанию, вместе с Sequencer: бесплатные анимации JB2A. / Optional, with Sequencer: the free JB2A animations."
+      }
+    ]
+  },
+  "url": "https://github.com/klimenkoyg/foundry-traps-pf",
+  "manifest": "https://github.com/klimenkoyg/foundry-traps-pf/releases/latest/download/module.json",
+  "download": "https://github.com/klimenkoyg/foundry-traps-pf/releases/download/v0.1.0/module.zip",
+  "readme": "https://github.com/klimenkoyg/foundry-traps-pf/blob/main/README.md",
+  "bugs": "https://github.com/klimenkoyg/foundry-traps-pf/issues",
+  "changelog": "https://github.com/klimenkoyg/foundry-traps-pf/blob/main/CHANGELOG.md",
+  "license": "https://github.com/klimenkoyg/foundry-traps-pf/blob/main/LICENSE"
+}
