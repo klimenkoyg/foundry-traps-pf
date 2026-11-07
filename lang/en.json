@@ -29,7 +29,8 @@
     "Kind": {
       "all": "Any kind",
       "mechanical": "Mechanical",
-      "magical": "Magical"
+      "magical": "Magical",
+      "natural": "Natural"
     },
     "Tier": {
       "label": "Party level",
@@ -208,6 +209,36 @@
         "name": "Alarm Plate",
         "text": "Harmless, but it rings loudly: guards and monsters learn they have guests. The GM gets a notice.",
         "flavor": "Somewhere above, a bell starts ringing!"
+      },
+      "brownMold": {
+        "name": "Brown Mold",
+        "text": "A furry brown growth on the stone that draws the warmth out of anything alive nearby. Fire makes it spread; cold destroys it.",
+        "flavor": "A deathly chill rolls off the patch on the wall — your breath turns to frost!"
+      },
+      "yellowMold": {
+        "name": "Yellow Mold",
+        "text": "Yellow patches on the wall. When touched, they burst into a cloud of caustic spores that catches everyone nearby. Sunlight and fire destroy it.",
+        "flavor": "The mold bursts into a cloud of yellow spores!"
+      },
+      "greenSlime": {
+        "name": "Green Slime",
+        "text": "A blob of slime drops from the ceiling onto whoever passes below and eats through flesh, metal and wood. It burns every turn you stay under it.",
+        "flavor": "A cold green blob lands on you — and starts to hiss!"
+      },
+      "razorvine": {
+        "name": "Razorvine",
+        "text": "A tangle of vines with razor-sharp leaves. Every turn spent in it leaves cuts. It can be hacked through or burned.",
+        "flavor": "Razor leaves bite into your skin!"
+      },
+      "quicksand": {
+        "name": "Quicksand",
+        "text": "Smooth sand gives way underfoot and pulls you down. A creature caught in it is immobilized until it Escapes.",
+        "flavor": "The sand slides away beneath you and drags you down!"
+      },
+      "toxicFumes": {
+        "name": "Toxic Fumes",
+        "text": "Yellow mist seeps from cracks in the floor. Every breath of it leaves you sick to your stomach.",
+        "flavor": "Caustic yellow mist burns your throat!"
       }
     },
     "App": {
@@ -265,7 +296,7 @@
       },
       "tabMine": "My traps",
       "mineEmptyTitle": "Nothing here yet",
-      "mineEmpty": "Traps you configure and save show up here. Open any trap in the library or on the scene, change what you need and press “Save to My traps…” — you’ll be asked to name it.",
+      "mineEmpty": "Make a trap from scratch, take one from the library and change it to your liking, or load a file another GM shared with you. A hazard is the same thing: kind “Natural”, fires every turn.",
       "toLibrary": "Open the library",
       "mineHint": "Click a trap to configure it, or drag it onto the map. Use the pencil to rename it.",
       "renameCustom": "Rename",
@@ -282,7 +313,13 @@
       "playerDisarm": {
         "on": "On",
         "off": "Off"
-      }
+      },
+      "newTrap": "New trap",
+      "exportAll": "Save to file",
+      "exportAllHint": "All my traps in one .json file",
+      "exportOne": "Save this trap to a file",
+      "importFile": "Load from file",
+      "importHint": "A .json file another GM shared with you"
     },
     "Hud": {
       "reveal": "“{name}” is hidden from players. Click to reveal.",
@@ -349,7 +386,8 @@
         "trigger": "steps on the trap",
         "area": "caught in the area",
         "manual": "hit by the trap",
-        "disarm": "slipped while disarming"
+        "disarm": "slipped while disarming",
+        "turn": "starts its turn in the area"
       },
       "waitSave": "waiting for a save: {save}, DC {dc}",
       "whySave": "{save} save: {total} vs DC {dc} — {outcome}",
@@ -410,6 +448,13 @@
       "noRotation": "“{name}”: traps don't rotate to arbitrary angles — the ↻ button next to the trap on the map turns it 90°.",
       "straightened": "Trap Library PF2e straightened {n} rotated traps and triggers in place. To turn a trap 90°, use the ↻ button next to it on the map.",
       "rotateShape": "“{name}”: only a rectangular region turns 90°.",
+      "exported": "Saved to file: {n}. Look for “{file}” in your browser downloads.",
+      "exportEmpty": "You have no traps of your own yet — nothing to save.",
+      "imported": "Added to My traps: {n}.",
+      "importBad": "This file has no Trap Library traps.",
+      "importOther": "The traps in this file are for {system} and don't fit here.",
+      "imageUploadFailed": "“{name}”: the picture from the file could not be saved to the server — the trap was added without it.",
+      "imageTooBig": "“{name}”: the picture is over {mb} MB — it stays a link instead of going into the file.",
       "notPf2e": "Trap Library PF2e is made for Pathfinder 2e: checks and damage won’t work in another system.",
       "noRank": "{name} isn’t skilled enough: Disable a Device needs {skill} at rank “{rank}”."
     },
@@ -540,6 +585,23 @@
         "activators": {
           "label": "Triggers",
           "hint": "How many separate areas someone has to step on. With none, the trap's own area sets it off."
+        },
+        "natural": {
+          "label": "Natural hazard"
+        },
+        "everyTurn": {
+          "label": "Every turn",
+          "hint": "In combat, also hits at the start of the turn of everyone standing in the area."
+        },
+        "visible": {
+          "label": "Visible from the start",
+          "hint": "Goes on the map already shown to the players."
+        },
+        "image": {
+          "label": "Picture on the map"
+        },
+        "jb2a": {
+          "label": "JB2A animation"
         },
         "level": {
           "label": "Trap level",
@@ -832,6 +894,10 @@
       "reset": "Reset",
       "activatorHint": "Triggers appear in the trap's area and hit everyone in it. Move them on the map with the teal ✥ handle.",
       "manualHint": "Doesn't fire from footsteps — only from the ▶ button on the map or Set off on the scene tab.",
+      "kind": "Kind",
+      "everyTurn": "Fires",
+      "look": "Picture on the map",
+      "jb2aHint": "This list is here because Sequencer and JB2A are installed. Without them the trap shows its built-in animation.",
       "partyRow": "party {party} → lvl {level}",
       "levelHint": "For a level {party} party: {xp} XP.",
       "conditionValueHint": "Frightened 1, sickened 2… One higher on a critical failure."
@@ -858,6 +924,46 @@
       "page": "Release page on GitHub",
       "ok": "Got it",
       "later": "Remind me tomorrow"
+    },
+    "KindTag": {
+      "mechanical": "Mechanical",
+      "magical": "Magical",
+      "natural": "Natural"
+    },
+    "Turn": {
+      "enter": "When entered",
+      "every": "When entered and every turn inside",
+      "hint": "Every turn works in combat: at the start of the turn of each creature standing in the area. Outside combat it fires only when entered.",
+      "badge": "Every turn",
+      "tooltip": "In combat, also at the start of the turn of everyone standing in the area"
+    },
+    "Import": {
+      "title": "Load traps",
+      "count": "traps in the file: {n}",
+      "new": "New",
+      "replace": "Replaces yours",
+      "replaceHint": "You already have this trap — the version from the file will replace it",
+      "skip": "Doesn't fit",
+      "skipSystem": "This trap is for {system}",
+      "skipEmpty": "The trap has no name",
+      "note": "Checked traps will appear on the My traps tab.",
+      "add": "Add checked",
+      "cancel": "Cancel"
+    },
+    "Share": {
+      "fileAll": "Trap Library PF2e — my traps",
+      "fileOne": "Trap Library PF2e — {name}"
+    },
+    "Image": {
+      "pick": "Choose…",
+      "clear": "Remove picture",
+      "placeholder": "Server path or https:// link",
+      "hint": "Drawn where the trap is, instead of the module’s drawing, once the trap is visible. A link to another site only shows if that site allows it; picking a picture on the Foundry server is more reliable. A server picture is saved inside the trap file."
+    },
+    "Jb2a": {
+      "auto": "Match the built-in one",
+      "none": "None — built-in only",
+      "missing": "not in this world"
     },
     "Degree": {
       "critFailure": "critical failure",

@@ -84,6 +84,32 @@ function readyGlyph(iconClass) {
   return null;
 }
 
+/* ---------------------------------------------------------------- свои картинки */
+
+const images = new Map(); // путь → { img, ok }
+
+/**
+ * Своя картинка ловушки, если уже загружена; иначе начать загрузку и перерисовать, когда придёт.
+ * Чужой сайт должен разрешать показ (CORS): иначе картинка не загрузится и останется рисунок модуля —
+ * без этого холст метки нельзя было бы отдать видеокарте.
+ */
+function readyImage(src) {
+  if (!src) return null;
+  const known = images.get(src);
+  if (known) return known.ok ? known.img : null;
+  const img = new Image();
+  const entry = { img, ok: false };
+  images.set(src, entry);
+  if (/^https?:/i.test(src) && !src.startsWith(globalThis.location?.origin ?? "\0")) img.crossOrigin = "anonymous";
+  img.addEventListener("load", () => {
+    entry.ok = true;
+    scheduleMarkers({ animate: false });
+  });
+  img.addEventListener("error", () => console.warn(`${MODULE_ID} | картинка ловушки не загрузилась: ${src}`));
+  img.src = src;
+  return null;
+}
+
 /* ---------------------------------------------------------------- что видит этот пользователь */
 
 /** Вид метки для текущего пользователя или null (игрок ещё не заметил ловушку). */
@@ -102,6 +128,7 @@ function viewOf(region, behavior) {
     options,
     fx: s.fx,
     damageType: s.damageType,
+    image: s.image || "",
     seed: seedOf(region.id),
     // Перечёркнутый глаз на бледной метке не нужен, если рядом кнопка-глаз ведущего.
     ghostBadge: !revealed && !mapButtonsOn(),
@@ -138,6 +165,7 @@ function render(entry, now = performance.now()) {
     badgeGlyph: spec.badgeGlyph,
     device: spec.view.device,
     options: spec.view.options,
+    image: spec.image,
     fx: spec.view.fx,
     damageType: spec.view.damageType,
     seed: spec.view.seed,
@@ -231,7 +259,8 @@ export function refreshMarkers({ animate = true } = {}) {
     const glyph = readyGlyph(view.icon);
     const badge = view.badge === false ? null : badgeFor({ ...view, ghost: view.ghost && view.ghostBadge });
     const badgeGlyph = badge ? readyGlyph(badge.icon) : null;
-    const key = JSON.stringify([bounds.x, bounds.y, bounds.width, bounds.height, cell, regionElevation(region), view.severity, view.icon, view.state, view.ghost, view.device, view.options, view.fx, view.damageType, view.ghostBadge, view.badge, view.outline, view.ownTrigger, Boolean(glyph), Boolean(badgeGlyph)]);
+    const image = readyImage(view.image);
+    const key = JSON.stringify([bounds.x, bounds.y, bounds.width, bounds.height, cell, regionElevation(region), view.severity, view.icon, view.state, view.ghost, view.device, view.options, view.fx, view.damageType, view.ghostBadge, view.badge, view.outline, view.ownTrigger, Boolean(glyph), Boolean(badgeGlyph), view.image, Boolean(image)]);
     const prev = markers.get(region.id);
     if (prev?.key === key) return;
 
@@ -240,7 +269,7 @@ export function refreshMarkers({ animate = true } = {}) {
     if (motion && !view.ghost && (!prev || prev.view.ghost)) anim = { kind: "reveal", start: now };
     else if (motion && prev && prev.view.state !== view.state) anim = { kind: "pop", start: now };
     else if (prev?.anim) anim = prev.anim; // шрифт догрузился посреди анимации — досмотреть её
-    paint(region.id, { bounds, cell, view, key, glyph, badgeGlyph, elevation: regionElevation(region) }, prev, anim);
+    paint(region.id, { bounds, cell, view, key, glyph, badgeGlyph, image, elevation: regionElevation(region) }, prev, anim);
   };
 
   for (const { region, behavior } of sceneTraps(scene)) {
@@ -256,7 +285,7 @@ export function refreshMarkers({ animate = true } = {}) {
       alive.add(part.id);
       const kind = activatorLook(regionBounds(part));
       const outline = game.user.isGM ? TRIGGER_RGB : null;
-      place(part, { ...view, device: ACTIVATOR_TELL, options: { kind }, icon: "", seed: seedOf(part.id), ghostBadge: false, badge: false, outline });
+      place(part, { ...view, device: ACTIVATOR_TELL, options: { kind }, icon: "", image: "", seed: seedOf(part.id), ghostBadge: false, badge: false, outline });
     }
   }
 

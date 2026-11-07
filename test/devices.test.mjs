@@ -15,7 +15,8 @@ import {
 import { FX_PRESETS, SOUND_NAMES } from "../scripts/core/fx/presets.mjs";
 
 test("у каждой встроенной ловушки есть устройство, и его числа совпадают с описанием", () => {
-  for (const raw of CATALOG) {
+  // Природные опасности (плесень, слизь, песок…) пока без устройства — числа заданы прямо.
+  for (const raw of CATALOG.filter((x) => !x.natural)) {
     assert.ok(raw.device in DEVICES, `${raw.id}: нет устройства`);
     assert.deepEqual(normalizeOptions(raw.device, raw.options), raw.options, `${raw.id}: параметры не в норме`);
     const plain = normalizeTrap(raw);

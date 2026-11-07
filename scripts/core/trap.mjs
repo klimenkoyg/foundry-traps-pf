@@ -15,6 +15,11 @@ import { attackShift, clampLevel, damageFactor, dcShift, hazardXp, rankShift, sa
  * @property {"setback"|"dangerous"|"deadly"} severity  Опасность: цвет и порядок в библиотеке
  * @property {number} level           Уровень ловушки (для партии 1 уровня; на сцене — под уровень партии)
  * @property {boolean} magical
+ * @property {boolean} natural        Природная опасность (плесень, слизь, зыбучий песок); не бывает магической
+ * @property {boolean} everyTurn      Бьёт ещё и в бою, в начале хода каждого, кто стоит в области
+ * @property {boolean} visible        Встаёт на карту уже показанной игрокам (плесень на стене видно и так)
+ * @property {string} image           Своя картинка на карте вместо рисунка модуля: путь на сервере или https-ссылка
+ * @property {string} jb2a            Анимация JB2A: "" — подобрать к встроенной, "none" — только встроенная, иначе запись Sequencer
  * @property {number} width           Ширина области в клетках
  * @property {number} height          Высота области в клетках
  * @property {number} size            Большая сторона (для старых ловушек — сторона квадрата)
@@ -55,6 +60,9 @@ import { attackShift, clampLevel, damageFactor, dcShift, hazardXp, rankShift, sa
  */
 
 export const SEVERITIES = ["setback", "dangerous", "deadly"];
+/** Вид: механизм, магия или природная опасность. */
+export const KINDS = ["mechanical", "magical", "natural"];
+export const trapKind = (trap) => (trap?.magical ? "magical" : trap?.natural ? "natural" : "mechanical");
 
 /** Больше триггеров у одной ловушки не ставим. */
 export const MAX_ACTIVATORS = 3;
@@ -88,6 +96,11 @@ const DEFAULTS = {
   severity: "dangerous",
   level: 1,
   magical: false,
+  natural: false,
+  everyTurn: false,
+  visible: false,
+  image: "",
+  jb2a: "",
   size: 1,
   affects: "trigger",
   stops: false,
@@ -128,6 +141,22 @@ const int = (v, fallback, min = -Infinity, max = Infinity) => {
 const oneOf = (v, list, fallback) => (list.includes(v) ? v : fallback);
 const str = (v) => (typeof v === "string" ? v.trim() : "");
 
+/**
+ * Своя картинка: путь на сервере Foundry («worlds/…/mold.webp») или ссылка http(s). Картинки внутри
+ * данных (data:) не храним — они раздули бы мир; в файле обмена они лежат отдельно (core/share.mjs).
+ */
+export function imagePath(value) {
+  const v = str(value);
+  if (!v || v.length > 2000 || /^(data|javascript|blob):/i.test(v) || /[\u0000-\u001f<>"]/.test(v)) return "";
+  return v;
+}
+
+/** Анимация JB2A: "" (подобрать), "none" (только встроенная) или запись Sequencer «jb2a.…». */
+export const jb2aKey = (value) => {
+  const v = str(value);
+  return v === "none" || /^jb2a\.[\w.-]{1,200}$/.test(v) ? v : "";
+};
+
 /** Любые данные (из каталога, настроек, поведения области) → полная корректная ловушка. */
 export function normalizeTrap(raw = {}) {
   const t = { ...DEFAULTS, ...raw };
@@ -145,6 +174,11 @@ export function normalizeTrap(raw = {}) {
     severity: oneOf(t.severity, SEVERITIES, DEFAULTS.severity),
     level: clampLevel(int(t.level, DEFAULTS.level)),
     magical: Boolean(t.magical),
+    natural: !t.magical && Boolean(t.natural),
+    everyTurn: Boolean(t.everyTurn),
+    visible: Boolean(t.visible),
+    image: imagePath(t.image),
+    jb2a: jb2aKey(t.jb2a),
     width,
     height,
     size: Math.max(width, height),
@@ -366,6 +400,11 @@ export function toBehaviorData(trap, { party = 1, flavor = "", text = "" } = {})
     severity: t.severity,
     level: t.level,
     magical: t.magical,
+    natural: t.natural,
+    everyTurn: t.everyTurn,
+    visible: t.visible,
+    image: t.image,
+    jb2a: t.jb2a,
     affects: t.affects,
     stops: t.stops,
     detectDC: t.detectDC,
@@ -417,8 +456,7 @@ export function filterTraps(entries, { query = "", severity = "", kind = "", dam
   const q = str(query).toLowerCase();
   return entries.filter(({ trap, name, text }) => {
     if (severity && trap.severity !== severity) return false;
-    if (kind === "magical" && !trap.magical) return false;
-    if (kind === "mechanical" && trap.magical) return false;
+    if (kind && trapKind(trap) !== kind) return false;
     if (damageType) {
       // Тип урона без самого урона (сонный газ) не считается; окно передаёт только типы — им верим.
       const first = trap.damage === undefined || trap.damage ? trap.damageType : "";
@@ -439,3 +477,28 @@ export const customId = (now = Date.now(), rnd = Math.random()) => `custom-${now
  * подстраиваться под другие уровни.
  */
 export const withFixedDamage = (trap, fixed) => ({ ...normalizeTrap(trap), fixedDamage: Boolean(fixed) });
+
+/**
+ * Заготовка для кнопки «Новая ловушка»: всё заполнено разумно, остаётся назвать и поправить.
+ * Помеха уровня 0 — для партии 1 уровня; числа — по таблицам GM Core для уровня 0.
+ */
+export function blankTrap() {
+  return normalizeTrap({
+    icon: "fa-solid fa-triangle-exclamation",
+    severity: "setback",
+    level: 0,
+    size: 1,
+    detectDC: 16,
+    detectRank: 0,
+    disarmDC: 16,
+    disarmSkill: "thievery",
+    disarmRank: 0,
+    saveAbility: "reflex",
+    saveDC: 16,
+    onSave: "basic",
+    damage: "2d6+3",
+    damageType: "piercing",
+    fx: "darts",
+    sound: "click",
+  });
+}

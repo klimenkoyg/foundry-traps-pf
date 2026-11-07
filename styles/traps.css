@@ -1932,7 +1932,7 @@
   display: grid;
   justify-items: center;
   gap: 8px;
-  max-width: 46ch;
+  max-width: 64ch;
   margin: 48px auto;
   padding: 0 16px;
   text-align: center;
@@ -1955,6 +1955,235 @@
 .ssl-traps .st-mine-empty p {
   margin: 0 0 6px;
   line-height: 1.5;
+}
+
+/* Пустая вкладка: кнопки по двое в ряд */
+.ssl-traps .st-mine-start {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Полоса над своими ловушками: «Новая…» слева, файлы справа */
+.ssl-traps .st-mine-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 12px 0;
+}
+
+.ssl-traps .st-mine-bar .st-btn,
+.ssl-traps .st-mine-start .st-btn {
+  margin-left: 0;
+}
+
+.ssl-traps .st-mine-files {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.ssl-traps .st-mine-files .st-btn.is-quiet {
+  height: 32px;
+  border-color: transparent;
+}
+
+.ssl-traps .st-mine-files .st-btn.is-quiet:hover {
+  border-color: var(--st-line);
+  color: var(--st-ink);
+}
+
+/* Природная опасность и «каждый ход» на карточке и в строке сцены */
+.ssl-traps .st-tag.is-natural {
+  color: color-mix(in srgb, var(--st-good) 70%, var(--st-ink));
+}
+
+.ssl-traps .st-card-turn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--st-accent);
+  font-weight: 600;
+}
+
+.ssl-traps .st-badge.is-turn {
+  color: var(--st-accent);
+}
+
+/* Редактор: вид ловушки и переключатель-ряд в разделе */
+.ssl-traps .st-seg-kind i {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.ssl-traps .st-field.is-seg .st-seg {
+  margin-top: 2px;
+}
+
+.ssl-traps .st-field.is-seg .st-seg span i {
+  width: 14px;
+  text-align: center;
+  color: var(--st-ink-3);
+}
+
+.ssl-traps .st-field.is-seg .st-seg input:checked + span i {
+  color: var(--st-accent);
+}
+
+/* «Видна сразу» в шапке редактора */
+.ssl-traps .st-check.st-visible span i {
+  color: var(--st-ink-3);
+  font-size: 12px;
+}
+
+.ssl-traps .st-check.st-visible input:checked + span i {
+  color: var(--st-accent);
+}
+
+/* Своя картинка: миниатюра, путь, «Выбрать…», «убрать» */
+.ssl-traps .st-image-pick {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.ssl-traps .st-image-pick .st-btn {
+  margin-left: 0;
+}
+
+.ssl-traps .st-image-pick .st-icon-btn[hidden] {
+  display: none;
+}
+
+.ssl-traps .st-image-thumb {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border: 1px solid var(--st-line-soft);
+  border-radius: var(--st-r);
+  background: var(--st-bg);
+  color: var(--st-ink-3);
+}
+
+.ssl-traps .st-image-thumb img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+/* Картинка на карточке — полосой под заголовком */
+.ssl-traps .st-card-image {
+  display: block;
+  width: 100%;
+  height: 72px;
+  border: 1px solid var(--st-line-soft);
+  border-radius: var(--st-r);
+  object-fit: cover;
+}
+
+/* Окно «Загрузить ловушки» */
+.ssl-traps.st-import {
+  display: grid;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.ssl-traps .st-import-file {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0;
+  color: var(--st-ink);
+  font-size: 13.5px;
+}
+
+.ssl-traps .st-import-file i {
+  color: var(--st-accent);
+}
+
+.ssl-traps .st-import-file span {
+  color: var(--st-ink-3);
+}
+
+.ssl-traps .st-import-list {
+  display: grid;
+  gap: 6px;
+  max-height: 360px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.ssl-traps .st-import-list li {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--st-line-soft);
+  border-radius: var(--st-r);
+  background: var(--st-surface);
+}
+
+.ssl-traps .st-import-list li.is-skip {
+  border-style: dashed;
+  background: transparent;
+}
+
+.ssl-traps .st-import-list li.is-skip .st-icon,
+.ssl-traps .st-import-list li.is-skip .st-import-name b {
+  opacity: 0.55;
+}
+
+.ssl-traps .st-import-list .st-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 13px;
+}
+
+.ssl-traps .st-import-name {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.ssl-traps .st-import-name b {
+  color: var(--st-ink);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.ssl-traps .st-import-name small {
+  color: var(--st-ink-3);
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+
+.ssl-traps .st-import-status.is-new {
+  color: color-mix(in srgb, var(--st-good) 75%, var(--st-ink));
+}
+
+.ssl-traps .st-import-status.is-replace {
+  color: var(--st-accent);
+}
+
+.ssl-traps .st-import-status.is-skip {
+  color: var(--st-ink-3);
+}
+
+.ssl-traps .st-import-note {
+  margin: 0;
+  color: var(--st-ink-3);
+  font-size: 12px;
 }
 
 /* Окно «Как назвать ловушку?» */

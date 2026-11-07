@@ -37,6 +37,8 @@ export async function placeTrap(scene, source, point, party = setting(SETTINGS.p
   const rect = placementRect(point, trap.width, scene.grid.size, trap.height);
   const system = toBehaviorData(trap, { party: entry.scaled ? 1 : party, flavor: entry.flavor, text: entry.text });
   if (entry.id) system.trapId = entry.id;
+  // «Видна сразу» — встаёт показанной игрокам и уже замеченной.
+  if (trap.visible) system.detected = true;
   const name = entry.name || trap.name || t("Title");
   const data = {
     name,
@@ -44,7 +46,7 @@ export async function placeTrap(scene, source, point, party = setting(SETTINGS.p
     shapes: [{ type: "rectangle", ...rect, rotation: 0, hole: false }],
     visibility: CONST.REGION_VISIBILITY.GAMEMASTER,
     behaviors: [{ type: BEHAVIOR_TYPE, name, system }],
-    flags: { [MODULE_ID]: { trapId: entry.id ?? trap.id, partyLevel: Number(party) || 1 } },
+    flags: { [MODULE_ID]: { trapId: entry.id ?? trap.id, partyLevel: Number(party) || 1, ...(trap.visible ? { revealed: true } : {}) } },
   };
   // v14: области живут на уровнях сцены — ставим на тот, что сейчас открыт.
   if (game.release.generation >= 14 && canvas.scene?.id === scene.id && canvas.level?.id) data.levels = [canvas.level.id];
@@ -202,6 +204,8 @@ export async function updatePlaced(region, behavior, trap) {
     regionChange.shapes = [{ type: "rectangle", ...rect, rotation: 0, hole: false }];
   }
   await region.update(regionChange);
+  // «Видна» в окне — то же, что глаз на вкладке сцены.
+  if (t0.visible !== isRevealed(region)) await setRevealed(region, behavior, t0.visible);
   // Триггеров ровно столько, сколько выбрано в окне (оно открывается с их числом на сцене).
   await setActivatorCount(region, t0.activators);
 }

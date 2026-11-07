@@ -2,7 +2,7 @@
 
 import { rectCells } from "../../core/geometry.mjs";
 import { DAMAGE_MODES, SAVE_ROLLS } from "../../core/resolve.mjs";
-import { DAMAGE_TYPES, DETECT_MODES, DISARM_ROLLS, PARTY_LEVELS, PLAYER_DISARM, SEVERITIES, filterTraps, scaleTrap, trapXp } from "../../core/trap.mjs";
+import { DAMAGE_TYPES, DETECT_MODES, DISARM_ROLLS, KINDS, PARTY_LEVELS, PLAYER_DISARM, SEVERITIES, filterTraps, scaleTrap, trapXp } from "../../core/trap.mjs";
 import {
   addActivators,
   noticedBy,
@@ -19,10 +19,10 @@ import { requestDisarm } from "../disarm.mjs";
 import { DRAG_TYPE, IDEAS_URL, MODULE_ID, SETTINGS, THEME, tpl } from "../constants.mjs";
 import { damageLabel } from "../pf2e.mjs";
 import { t } from "../i18n.mjs";
-import { deleteCustom, getEntry, listEntries, saveCustom } from "../library.mjs";
+import { deleteCustom, exportCustom, getEntry, importCustom, listEntries, pickFile, previewImport, saveCustom, systemName } from "../library.mjs";
 import { activatorsOf, isRevealed, regionBounds, sceneTraps } from "../scene.mjs";
 import { setSetting, setting } from "../settings.mjs";
-import { askName } from "../dialogs.mjs";
+import { askImport, askName } from "../dialogs.mjs";
 import { activationLabel, affectsLabel, stats } from "../summary.mjs";
 import { TrapEditor } from "./trap-editor.mjs";
 
@@ -55,6 +55,10 @@ export class TrapApp extends HandlebarsApplicationMixin(ApplicationV2) {
       deleteTrap: TrapApp.#onDelete,
       deleteCustom: TrapApp.#onDeleteCustom,
       renameCustom: TrapApp.#onRenameCustom,
+      exportCustom: TrapApp.#onExportCustom,
+      newTrap: TrapApp.#onNewTrap,
+      exportAll: TrapApp.#onExportAll,
+      importFile: TrapApp.#onImportFile,
       search: TrapApp.#onSearch,
     },
   };
@@ -125,6 +129,9 @@ export class TrapApp extends HandlebarsApplicationMixin(ApplicationV2) {
         severity: trap.severity,
         severityLabel: levelLabel(trap, party),
         magical: trap.magical,
+        natural: trap.natural,
+        everyTurn: trap.everyTurn,
+        image: trap.image,
         custom: e.custom,
         area: t("Stat.areaValue", { w: trap.width, h: trap.height }),
         affects: affectsLabel(trap),
@@ -157,6 +164,7 @@ export class TrapApp extends HandlebarsApplicationMixin(ApplicationV2) {
         triggers: trap.triggers,
         triggersLabel: t("App.triggered", { n: trap.triggers }),
         manual: trap.manual,
+        everyTurn: trap.everyTurn,
         activation: activationLabel(trap, activators),
         area: t("Stat.areaValue", { w: cells.width, h: cells.height }),
         stats: stats(trap),
@@ -173,7 +181,7 @@ export class TrapApp extends HandlebarsApplicationMixin(ApplicationV2) {
       filter: this._filter,
       tiers: PARTY_LEVELS.map((n) => ({ value: n, label: String(n), selected: n === party })),
       severities: SEVERITIES.map((s) => ({ value: s, label: t(`Severity.${s}`), selected: s === this._filter.severity })),
-      kinds: ["mechanical", "magical"].map((k) => ({ value: k, label: t(`Kind.${k}`), selected: k === this._filter.kind })),
+      kinds: KINDS.map((k) => ({ value: k, label: t(`Kind.${k}`), selected: k === this._filter.kind })),
       damageTypes: DAMAGE_TYPES.map((d) => ({ value: d, label: damageLabel(d), selected: d === this._filter.damageType })),
       entries,
       scene: scene ? { name: scene.name, traps, anyHidden: traps.some((x) => !x.visible), anyShown: traps.some((x) => x.visible) } : null,
@@ -235,6 +243,7 @@ export class TrapApp extends HandlebarsApplicationMixin(ApplicationV2) {
       trap: {
         severity: el.dataset.severity,
         magical: el.dataset.magical === "true",
+        natural: el.dataset.natural === "true",
         damageType: el.dataset.damage.split(" ")[0] ?? "",
         damage2Type: el.dataset.damage.split(" ")[1] ?? "",
       },
@@ -357,6 +366,41 @@ export class TrapApp extends HandlebarsApplicationMixin(ApplicationV2) {
       content: `<p>${t("App.confirmDeleteCustom", { name: foundry.utils.escapeHTML(entry.name) })}</p>`,
     });
     if (ok) await deleteCustom(id);
+  }
+
+  /* ---------- свои ловушки: новая, файлы ---------- */
+
+  static #onNewTrap() {
+    TrapEditor.openNew();
+  }
+
+  static async #onExportAll() {
+    const saved = await exportCustom();
+    if (!saved) return ui.notifications.warn(t("Notify.exportEmpty"));
+    ui.notifications.info(t("Notify.exported", { n: saved.count, file: saved.file }));
+  }
+
+  static async #onExportCustom(event, target) {
+    const id = target.closest("[data-trap]")?.dataset.trap;
+    const saved = id && (await exportCustom([id]));
+    if (saved) ui.notifications.info(t("Notify.exported", { n: saved.count, file: saved.file }));
+  }
+
+  /** Выбрать файл → показать, что в нём → добавить отмеченное в «Мои ловушки». */
+  static async #onImportFile() {
+    const file = await pickFile();
+    if (!file) return;
+    const preview = previewImport(await file.text());
+    if (!preview.ok || !preview.items.length) return ui.notifications.warn(t("Notify.importBad"));
+    if (preview.items.every((x) => x.reason === "system")) {
+      return ui.notifications.warn(t("Notify.importOther", { system: systemName(preview.system) }));
+    }
+    const picked = await askImport({ file: file.name, items: preview.items, systemName: systemName(preview.system) });
+    if (!picked?.length) return;
+    const n = await importCustom(picked);
+    ui.notifications.info(t("Notify.imported", { n }));
+    this._tab = "mine";
+    this.render();
   }
 
   static async #onSearch() {

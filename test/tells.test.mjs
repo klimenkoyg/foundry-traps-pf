@@ -11,7 +11,8 @@ const trapOf = (e) => e.trap ?? e;
 test("у каждого устройства есть рисунок, у каждой ловушки библиотеки — устройство с рисунком", () => {
   // Рисунки: у каждого устройства свой, и ещё один — у триггера ловушки.
   assert.deepEqual([...TELL_DEVICES].sort(), [...Object.keys(DEVICES), ACTIVATOR_TELL].sort());
-  for (const e of CATALOG) assert.ok(hasTell(trapOf(e).device), trapOf(e).id);
+  // Природные опасности пока без рисунка: на карте у них знак.
+  for (const e of CATALOG.filter((x) => !trapOf(x).natural)) assert.ok(hasTell(trapOf(e).device), trapOf(e).id);
   assert.equal(hasTell(""), false);
   assert.equal(hasTell("toString"), false, "не ловится на свойства прототипа");
 });
@@ -64,7 +65,7 @@ test("метка-рисунок: все ловушки библиотеки во
           const ctx = stubContext();
           const cell = 100;
           const pad = markerPad(cell);
-          drawMarker(ctx, { x: pad, y: pad, width: t.size * cell, height: t.size * cell, cell, severity: t.severity, state, ghost, device: t.device, options: t.options, fx: t.fx, damageType: t.damageType, seed: 3, reveal, pop: reveal });
+          drawMarker(ctx, { x: pad, y: pad, width: (t.width ?? t.size) * cell, height: (t.height ?? t.size) * cell, cell, severity: t.severity, state, ghost, device: t.device, options: t.options, fx: t.fx, damageType: t.damageType, seed: 3, reveal, pop: reveal });
           assert.deepEqual(ctx.bad, [], `${t.id} ${state} ghost=${ghost} reveal=${reveal}`);
         }
       }
@@ -123,3 +124,25 @@ test("у ловушки с отдельным триггером своя рас
     }
   }
 });
+
+test("метка со своей картинкой: картинка вместо рисунка, без NaN во всех состояниях", () => {
+  const img = { naturalWidth: 400, naturalHeight: 200 };
+  for (const state of MARKER_STATES) {
+    for (const ghost of [false, true]) {
+      for (const reveal of [0, 0.5, 1]) {
+        const calls = [];
+        const ctx = stubContext();
+        const spy = new Proxy(ctx, { get: (t, p) => (p === "drawImage" ? (...a) => calls.push(a) : t[p]), set: (t, p, v) => ((t[p] = v), true) });
+        drawMarker(spy, { x: 90, y: 90, width: 200, height: 100, cell: 100, severity: "dangerous", state, ghost, image: img, seed: 3, reveal, pop: 1 });
+        assert.deepEqual(ctx.bad, [], `${state} ghost=${ghost} reveal=${reveal}`);
+        assert.equal(calls.length, 1, "картинка нарисована один раз");
+        assert.ok(calls[0].slice(1).every(Number.isFinite));
+      }
+    }
+  }
+  // Картинка ещё не загрузилась — обычная метка (знак), без падения.
+  const ctx = stubContext();
+  drawMarker(ctx, { x: 90, y: 90, width: 100, height: 100, cell: 100, severity: "setback", state: "armed", image: { naturalWidth: 0 }, seed: 1 });
+  assert.deepEqual(ctx.bad, []);
+});
+

@@ -43,6 +43,53 @@ export function soundPath(sound, moduleId) {
   return /[/.]/.test(sound) ? sound : "";
 }
 
+/** Разделы JB2A, которые годятся для ловушек и опасностей (второе слово записи: jb2a.<раздел>.…). */
+const JB2A_TOPICS = /fire|flame|burn|explo|fog|cloud|smoke|gas|poison|stink|acid|liquid|splash|slime|ice|frost|snow|cold|sleet|lightning|static|electric|spark|thunder|shatter|wave|dark|necro|toll|skull|web|entangle|vine|thorn|plant|rock|stone|boulder|ground|crack|earth|impact|spike|blade|dagger|arrow|bolt|dart|rune|sign|glyph|magic_circle|grease|blast|burst|trap|chain|spirit|swirl|energy/i;
+/** Совпали по слову, но к ловушкам не относятся (камни иоун, светлячки, духовное оружие…). */
+const JB2A_SKIP = /ioun|fireflies|firework|spiritual_weapon|snowball/i;
+/** Куски одной анимации: ловушка играет её целиком, кусок сам по себе не нужен. */
+const JB2A_PARTS = /\.(intro|outro|still_frame)(\.|$)/;
+/** Сколько вариантов одного раздела показывать: у Patreon-версии их сотни (цвета). */
+export const JB2A_PER_TOPIC = 40;
+
+/**
+ * Записи JB2A из базы Sequencer → разделы для выбора: [{ label, options: [{ value, label }] }].
+ * Варианты одной анимации (…grey.0, …grey.1) и длины полёта (…05ft, …30ft) сливаются в одну запись —
+ * Sequencer берёт случайный вариант и нужную длину; петля (…loop…) пропускается, если есть та же
+ * анимация целиком (…complete…).
+ */
+export function jb2aGroups(entries, { perTopic = JB2A_PER_TOPIC } = {}) {
+  const keys = new Set();
+  for (const full of entries ?? []) {
+    if (typeof full !== "string" || !full.startsWith("jb2a.")) continue;
+    // …01.30ft — полёт на 30 футов: длину Sequencer подбирает сам по расстоянию (см. flightPath).
+    const key = full.replace(/(\.\d+)+$/, "").replace(/\.\d+ft$/, "");
+    if (!JB2A_PARTS.test(key)) keys.add(key);
+  }
+  const groups = new Map();
+  for (const key of keys) {
+    if (/\.loop(\.|$)/.test(key) && keys.has(key.replace(/\.loop(\.|$)/, ".complete$1"))) continue;
+    const [, topic, ...rest] = key.split(".");
+    if (!topic || !JB2A_TOPICS.test(topic) || JB2A_SKIP.test(topic)) continue;
+    const list = groups.get(topic) ?? groups.set(topic, new Map()).get(topic);
+    if (list.size < perTopic) list.set(key, (rest.join(" · ") || topic).replace(/_/g, " "));
+  }
+  const nice = (s) => s.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
+  return [...groups.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([topic, list]) => ({ label: nice(topic), options: [...list.entries()].map(([value, label]) => ({ value, label })) }));
+}
+
+/**
+ * Полёт через область (стрела, болт, луч JB2A): вдоль длинной стороны, с полклетки запаса по краям,
+ * чтобы снаряд пересёк всю область. at — центр, width/height — стороны в px.
+ */
+export function flightPath(at, width, height, cell = 0) {
+  const pad = cell / 2;
+  if (width >= height) return { from: { x: at.x - width / 2 - pad, y: at.y }, to: { x: at.x + width / 2 + pad, y: at.y } };
+  return { from: { x: at.x, y: at.y - height / 2 - pad }, to: { x: at.x, y: at.y + height / 2 + pad } };
+}
+
 /** Первая запись JB2A, которая есть в базе. has(key) — проверка Sequencer.Database. */
 export function pickJb2a(fx, has) {
   for (const key of FX_PRESETS[fx]?.jb2a ?? []) {

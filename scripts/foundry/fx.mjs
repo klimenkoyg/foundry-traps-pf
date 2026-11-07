@@ -3,7 +3,7 @@
    или встроенный эффект — тогда рассылает его по сокету модуля, и каждый клиент рисует сам. */
 
 import { createEffect } from "../core/fx/painters.mjs";
-import { FX_PRESETS, pickJb2a, soundPath } from "../core/fx/presets.mjs";
+import { FX_PRESETS, flightPath, jb2aGroups, pickJb2a, soundPath } from "../core/fx/presets.mjs";
 import { MODULE_ID, SETTINGS, SOCKET } from "./constants.mjs";
 import { sceneSprite, seesArea } from "./layers.mjs";
 import { setting } from "./settings.mjs";
@@ -12,6 +12,55 @@ import { setting } from "./settings.mjs";
 const MAX_SIDE = 720;
 
 const sequencerReady = () => Boolean(game.modules.get("sequencer")?.active && globalThis.Sequencer?.Database && globalThis.Sequence);
+
+const exists = (key) => {
+  try {
+    return Boolean(Sequencer.Database.entryExists(key));
+  } catch {
+    return false;
+  }
+};
+
+/** Анимация полёта (стрела, болт, луч): Sequencer подбирает файл по длине, ей нужны «откуда» и «куда». */
+const isFlight = (key) => {
+  try {
+    const entry = Sequencer.Database.getEntry(key);
+    return Boolean((Array.isArray(entry) ? entry[0] : entry)?.rangeFind);
+  } catch {
+    return false;
+  }
+};
+
+/** Все записи JB2A из базы Sequencer (полные пути). */
+function jb2aEntries() {
+  const db = Sequencer.Database;
+  let list = Array.isArray(db.flattenedEntries) ? db.flattenedEntries : null;
+  if (!list && typeof db.getPathsUnder === "function") {
+    list = [];
+    const walk = (path, depth) => {
+      let kids = [];
+      try {
+        kids = db.getPathsUnder(path) ?? [];
+      } catch {
+        kids = [];
+      }
+      if (!kids.length || depth > 6) return list.push(path);
+      for (const k of kids) walk(`${path}.${k}`, depth + 1);
+    };
+    walk("jb2a", 0);
+  }
+  return (list ?? []).filter((x) => typeof x === "string" && x.startsWith("jb2a."));
+}
+
+/**
+ * Анимации JB2A, которые реально установлены, — для выбора в окне ловушки: [{ label, options: [{ value, label }] }]
+ * по разделам (см. jb2aGroups). null — Sequencer или JB2A не стоят (или анимации выключены в настройках).
+ */
+export function jb2aChoices() {
+  if (setting(SETTINGS.fxMode) !== "auto" || !sequencerReady()) return null;
+  const groups = jb2aGroups(jb2aEntries());
+  return groups.length ? groups : null;
+}
 
 export function registerFxSocket() {
   game.socket.on(SOCKET, (payload) => {
@@ -23,14 +72,14 @@ export function registerFxSocket() {
  * Показать ловушку на сцене (вызывает активный ведущий).
  * at: { x, y } центр, area — сторона области в px.
  */
-export async function playTrapFx(scene, { fx, sound, at, area, width = area, height = area, elevation = 0 }) {
+export async function playTrapFx(scene, { fx, jb2a = "", sound, at, area, width = area, height = area, elevation = 0 }) {
   const mode = setting(SETTINGS.fxMode);
   const src = soundPath(sound || FX_PRESETS[fx]?.sound, MODULE_ID);
   if (src) playSound(scene, src);
   if (mode === "off") return 0;
 
   const cell = scene.grid.size;
-  if (await playJb2a(scene, { fx, at, width, height, cell })) return 900;
+  if (await playJb2a(scene, { fx, jb2a, at, width, height, cell })) return 900;
   const payload = { sceneId: scene.id, fx, x: at.x, y: at.y, area, width, height, cell, elevation, seed: Math.floor(Math.random() * 1e9) };
   game.socket.emit(SOCKET, { action: "fx", fx: payload });
   const duration = playLocal(payload);
@@ -38,16 +87,27 @@ export async function playTrapFx(scene, { fx, sound, at, area, width = area, hei
 }
 
 /**
- * JB2A через Sequencer, если для этой анимации он есть и в настройках не «только свои».
+ * JB2A через Sequencer, если он стоит и в настройках не «только свои». jb2a — выбор ведущего:
+ * "" — подобрать к встроенной анимации, "none" — только встроенная, иначе своя запись (нет такой
+ * в базе — например, ловушку загрузили в мир без JB2A Patreon — подбираем, как обычно).
  * locally — только у себя (предпросмотр). → true, если сыграл.
  */
-async function playJb2a(scene, { fx, at, width, height, cell, locally = false }) {
-  if (setting(SETTINGS.fxMode) !== "auto" || !sequencerReady() || canvas.scene?.id !== scene.id) return false;
-  const key = pickJb2a(fx, (k) => Sequencer.Database.entryExists(k));
+async function playJb2a(scene, { fx, jb2a = "", at, width, height, cell, locally = false }) {
+  if (jb2a === "none" || setting(SETTINGS.fxMode) !== "auto" || !sequencerReady() || canvas.scene?.id !== scene.id) return false;
+  const key = jb2a && exists(jb2a) ? jb2a : pickJb2a(fx, exists);
   if (!key) return false;
   try {
-    // Вытянутая область — эффект растягивается по её форме.
-    const effect = new Sequence().effect().file(key).atLocation(at).size({ width: Math.max(width, cell) * 1.25, height: Math.max(height, cell) * 1.25 });
+    const w = Math.max(width, cell);
+    const h = Math.max(height, cell);
+    const effect = new Sequence().effect().file(key);
+    if (isFlight(key)) {
+      // Стрела или луч летит через всю область вдоль длинной стороны.
+      const { from, to } = flightPath(at, w, h, cell);
+      effect.atLocation(from).stretchTo(to);
+    } else {
+      // Вытянутая область — эффект растягивается по её форме.
+      effect.atLocation(at).size({ width: w * 1.25, height: h * 1.25 });
+    }
     if (locally) effect.locally();
     await effect.play();
     return true;
@@ -58,13 +118,13 @@ async function playJb2a(scene, { fx, at, width, height, cell, locally = false })
 }
 
 /** Посмотреть анимацию и звук только у себя (окно настройки): ровно то, что сыграет ловушка. */
-export async function previewFx(scene, { fx, sound, at, area, width = area, height = area }) {
+export async function previewFx(scene, { fx, jb2a = "", sound, at, area, width = area, height = area }) {
   const src = soundPath(sound || FX_PRESETS[fx]?.sound, MODULE_ID);
   const volume = Number(setting(SETTINGS.volume) ?? 0.7);
   if (src && volume > 0) foundry.audio.AudioHelper.play({ src, volume, autoplay: true, loop: false }, false);
   if (setting(SETTINGS.fxMode) === "off") return 0;
   const cell = scene.grid.size;
-  if (await playJb2a(scene, { fx, at, width, height, cell, locally: true })) return 900;
+  if (await playJb2a(scene, { fx, jb2a, at, width, height, cell, locally: true })) return 900;
   return playLocal({ sceneId: scene.id, fx, x: at.x, y: at.y, area: Math.max(area, cell), width, height, cell, seed: Math.floor(Math.random() * 1e9) });
 }
 

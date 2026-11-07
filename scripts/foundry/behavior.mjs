@@ -1,6 +1,7 @@
 /* Поведения областей модуля.
    «Ловушка» — все параметры ловушки; срабатывает, когда в область заходит токен, если у ловушки
-   нет триггеров и она не «только вручную».
+   нет триггеров и она не «только вручную». С «каждый ход» (природные опасности) — ещё и в бою,
+   в начале хода каждого, кто стоит в области.
    «Триггер ловушки» — отдельная область (плита, растяжка): наступили на неё — срабатывает ловушка,
    на которую она ссылается, и бьёт всех в своей области. Триггеров у ловушки может быть несколько.
    Окно настройки поведения Foundry строит само по схеме — так любую расставленную ловушку
@@ -42,6 +43,11 @@ export class TrapBehavior extends RegionBehaviorType {
       severity: new f.StringField({ required: true, initial: "dangerous", choices: labelled("TRAPS.Severity", SEVERITIES) }),
       level: new f.NumberField({ required: true, nullable: false, integer: true, min: MIN_LEVEL, max: MAX_LEVEL, initial: 1 }),
       magical: new f.BooleanField({ initial: false }),
+      natural: new f.BooleanField({ initial: false }),
+      everyTurn: new f.BooleanField({ initial: false }),
+      visible: new f.BooleanField({ initial: false }),
+      image: new f.StringField({ required: true, blank: true, initial: "" }),
+      jb2a: new f.StringField({ required: true, blank: true, initial: "" }),
       affects: new f.StringField({ required: true, initial: "trigger", choices: labelled("TRAPS.Affects", ["trigger", "area"]) }),
       stops: new f.BooleanField({ initial: false }),
       detectDC: dc(17),
@@ -85,6 +91,7 @@ export class TrapBehavior extends RegionBehaviorType {
 
   static events = {
     [CONST.REGION_EVENTS.TOKEN_MOVE_IN]: TrapBehavior.#onMoveIn,
+    ...(CONST.REGION_EVENTS.TOKEN_TURN_START ? { [CONST.REGION_EVENTS.TOKEN_TURN_START]: TrapBehavior.#onTurnStart } : {}),
   };
 
   /** Токен вошёл в область ловушки: срабатывает, если у неё нет триггеров и она не «вручную». */
@@ -93,6 +100,17 @@ export class TrapBehavior extends RegionBehaviorType {
     const region = this.parent.region ?? this.parent.parent;
     if (activatorsOf(region).length) return;
     await stepOn(event, this.parent, {});
+  }
+
+  /**
+   * Бой: ход начался у токена, который стоит в области. «Каждый ход» — бьёт только его (у остальных
+   * будет свой ход). Триггеры тут ни при чём: опасность действует, пока стоишь внутри.
+   */
+  static async #onTurnStart(event) {
+    if (!this.everyTurn || this.manual) return;
+    const token = event.data?.token;
+    if (!canTrigger(token) || !game.user.isActiveGM) return;
+    await fireTrap(this.parent, { trigger: token, targets: [token], cause: "turn" });
   }
 }
 

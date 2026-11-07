@@ -25,7 +25,8 @@ https://github.com/klimenkoyg/foundry-traps-pf/releases/latest/download/module.j
 - Foundry VTT **v14** (pf2e 8.x) or **v13** (pf2e 7.x).
 - System — **Pathfinder 2e**: saves, skills, proficiency ranks, damage and conditions come from it.
 - No other modules needed: animations and sounds are built in. Optionally, [Sequencer](https://foundryvtt.com/packages/sequencer)
-  and the free [JB2A](https://foundryvtt.com/packages/JB2A_DnD5e) (it works for PF2e too).
+  and the free [JB2A](https://foundryvtt.com/packages/JB2A_DnD5e) (it works for PF2e too). In a trap's
+  settings you can pick any installed JB2A animation — JB2A Patreon gives more choice.
 
 ## How to use
 
@@ -35,6 +36,44 @@ trap onto the map — it becomes a hidden region under the cursor.
 
 Each trap on the map has GM buttons: eye (show to players or hide), key (disable with the selected
 token), ▶ (fire now), ✥ (drag), ↻ (turn 90°), sliders (configure), footprints (add a trigger).
+
+## Your own traps and hazards
+
+The **My traps** tab holds the traps you configured and saved; every GM of the world sees them.
+
+- **New trap** opens the settings with a starting trap (a level 0 setback): name it and adjust the
+  numbers. A hazard is made the same way: kind Natural and “When entered and every turn inside”.
+- **Save to file** saves all your traps to one .json file, ⤓ on a card saves one. Use it to move
+  traps to another world or share them with another GM. **Load from file** first shows what will be
+  added, what replaces one of yours (the same file loaded again) and what doesn't fit (a D&D 5e file
+  — its numbers are different). Server pictures travel inside the file and are saved to the world
+  folder `worlds/<world>/ssl-traps/` on load.
+- The top of the settings window has the **kind** (mechanical, magical or natural — the library
+  filter uses it) and **Visible from the start**: such a trap goes on the map already revealed to
+  players. For a trap on the scene this box does the same as the eye.
+- **Fires: When entered and every turn inside** — in combat the trap also strikes at the start of
+  the turn of everyone standing in its area, one card per turn (“starts its turn in the area”).
+  Outside combat it fires only when entered.
+- **Picture on the map** replaces the module's drawing with your own picture: a file on the Foundry
+  server (Choose…) or an https link. A link to another site only shows if that site allows its
+  pictures on other sites; a picture on the Foundry server is more reliable.
+- **JB2A animation**, with Sequencer and JB2A installed: any installed animation, “Match the
+  built-in one” or “None — built-in only”. Arrows, bolts and beams fly across the whole area.
+
+### Natural hazards
+
+The Natural filter in the library. Numbers are for a level 1 party, from the GM Core tables for the
+hazard's level, and grow with the party level like any trap. Hazards that strike every turn deal
+about half a simple hazard's damage. On the map they show a hazard sign; you can set a picture.
+
+| Name | Lvl | Severity | Check | Damage | Condition | Notes |
+|---|---|---|---|---|---|---|
+| Brown Mold | 2 | dangerous | basic Fortitude DC 18 | 1d10+4 cold | — | visible from the start, every turn |
+| Yellow Mold | 2 | dangerous | Fortitude DC 18, success avoids; everyone in the area | 2d10+7 poison | sickened 1 | visible from the start |
+| Green Slime | 0 | setback | Reflex DC 16, success avoids | 1d6+2 acid | — | every turn |
+| Razorvine | 0 | setback | basic Reflex DC 16 | 1d6+2 slashing | — | visible from the start, every turn |
+| Quicksand | 0 | setback | — | — | immobilized | Stealth DC 19, Athletics DC 16 to escape |
+| Toxic Fumes | 1 | dangerous | basic Fortitude DC 17 | 1d6+3 poison | sickened 1 | visible from the start, every turn |
 
 ## The PF2e rules here
 
@@ -116,7 +155,8 @@ traps.fire(behavior);                          // fire manually
 
 ## Not yet
 
-- Complex hazards with initiative and a routine every round.
+- Complex hazards with initiative and a routine of their own. There is only “every turn”: a strike
+  at the start of the turn of whoever stands in the area.
 - Poisons and diseases with stages: poison is damage, persistent damage or a condition.
 - Breaking a trap with damage (AC, Hardness, HP) and dispel magic as a way to disable it.
 - Importing hazards from the PF2e compendium.

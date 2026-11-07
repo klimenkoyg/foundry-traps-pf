@@ -13,7 +13,12 @@
             <label data-severity="{{value}}"><input type="radio" name="severity" value="{{value}}" {{#if checked}}checked{{/if}}><span>{{label}}</span></label>
             {{/each}}
           </div>
-          <label class="st-check"><input type="checkbox" name="magical" {{#if magical}}checked{{/if}}><span>{{localize "TRAPS.Behavior.FIELDS.magical.label"}}</span></label>
+          <div class="st-seg st-seg-kind" role="radiogroup" aria-label="{{localize "TRAPS.Editor.kind"}}">
+            {{#each kinds}}
+            <label><input type="radio" name="kind" value="{{value}}" {{#if checked}}checked{{/if}}><span><i class="fa-solid {{icon}}" inert></i> {{label}}</span></label>
+            {{/each}}
+          </div>
+          <label class="st-check st-visible" data-tooltip="{{localize "TRAPS.Behavior.FIELDS.visible.hint"}}"><input type="checkbox" name="visible" {{#if visible}}checked{{/if}}><span><i class="fa-solid fa-eye" inert></i> {{localize "TRAPS.Behavior.FIELDS.visible.label"}}</span></label>
         </div>
       </div>
     </header>
@@ -58,15 +63,38 @@
       <summary><span>{{label}}</span></summary>
       <div class="st-fields">
         {{#each fields}}
+        {{#if isSeg}}
+        <div class="st-field is-wide is-seg" {{#if show}}data-show="{{show}}"{{/if}}>
+          <span class="st-field-label" id="{{../../uid}}-{{name}}">{{label}}</span>
+          <div class="st-seg" role="radiogroup" aria-labelledby="{{../../uid}}-{{name}}">
+            {{#each options}}
+            <label><input type="radio" name="{{../name}}" value="{{value}}" {{#if checked}}checked{{/if}}><span>{{#if icon}}<i class="fa-solid {{icon}}" inert></i> {{/if}}{{label}}</span></label>
+            {{/each}}
+          </div>
+          {{#if hint}}<small>{{hint}}</small>{{/if}}
+        </div>
+        {{else if isImage}}
+        <div class="st-field is-wide is-image">
+          <span class="st-field-label" id="{{../../uid}}-{{name}}">{{label}}</span>
+          <div class="st-image-pick">
+            <span class="st-image-thumb" data-image-thumb>{{#if value}}<img src="{{value}}" alt="">{{else}}<i class="fa-solid fa-image" inert></i>{{/if}}</span>
+            <input type="text" name="{{name}}" value="{{value}}" placeholder="{{placeholder}}" spellcheck="false" autocomplete="off" aria-labelledby="{{../../uid}}-{{name}}">
+            <button type="button" class="st-btn" data-action="pickImage"><i class="fa-solid fa-folder-open" inert></i> {{localize "TRAPS.Image.pick"}}</button>
+            <button type="button" class="st-icon-btn" data-action="clearImage" data-tooltip="{{localize "TRAPS.Image.clear"}}" aria-label="{{localize "TRAPS.Image.clear"}}" {{#unless value}}hidden{{/unless}}><i class="fa-solid fa-xmark" inert></i></button>
+          </div>
+          {{#if hint}}<small>{{hint}}</small>{{/if}}
+        </div>
+        {{else}}
         <label class="st-field{{#if wide}} is-wide{{/if}}{{#if isCheck}} is-check{{/if}}{{#if device}} is-device{{/if}}" {{#if show}}data-show="{{show}}"{{/if}}>
           <span class="st-field-label">{{label}}{{#if device}} <i class="fa-solid fa-gear" data-tooltip="{{localize "TRAPS.Device.controlled"}}" aria-label="{{localize "TRAPS.Device.controlled"}}"></i>{{/if}}</span>
-          {{#if isSelect}}<select name="{{name}}">{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>{{/if}}
+          {{#if isSelect}}<select name="{{name}}">{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}{{#each groups}}<optgroup label="{{label}}">{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</optgroup>{{/each}}</select>{{/if}}
           {{#if isNumber}}<input type="number" name="{{name}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}" inputmode="numeric">{{/if}}
           {{#if isText}}<input type="text" name="{{name}}" value="{{value}}" placeholder="{{placeholder}}" spellcheck="false" autocomplete="off">{{/if}}
           {{#if isCheck}}<input type="checkbox" name="{{name}}" {{#if value}}checked{{/if}}>{{/if}}
           {{#if isArea}}<textarea name="{{name}}" rows="3">{{value}}</textarea>{{/if}}
           {{#if hint}}<small>{{hint}}</small>{{/if}}
         </label>
+        {{/if}}
         {{/each}}
       </div>
     </details>

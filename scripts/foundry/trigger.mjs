@@ -51,6 +51,7 @@ async function resolve(behavior, region, scene, { trigger, targets, cause, viaAc
 
   const duration = await playTrapFx(scene, {
     fx: trap.fx,
+    jb2a: trap.jb2a,
     sound: trap.sound,
     at: rectCenter(bounds),
     area: Math.max(bounds.width, bounds.height, scene.grid.size),

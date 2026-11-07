@@ -19,10 +19,23 @@
     <i class="fa-solid fa-feather-pointed" inert></i>
     <h3>{{localize "TRAPS.App.mineEmptyTitle"}}</h3>
     <p>{{localize "TRAPS.App.mineEmpty"}}</p>
-    <button type="button" class="st-btn is-primary" data-action="switchTab" data-tab="library"><i class="fa-solid fa-book-skull" inert></i> {{localize "TRAPS.App.toLibrary"}}</button>
+    <div class="st-mine-start">
+      <button type="button" class="st-btn is-primary" data-action="newTrap"><i class="fa-solid fa-plus" inert></i> {{localize "TRAPS.App.newTrap"}}</button>
+      <button type="button" class="st-btn" data-action="switchTab" data-tab="library"><i class="fa-solid fa-book-skull" inert></i> {{localize "TRAPS.App.toLibrary"}}</button>
+      <button type="button" class="st-btn" data-action="importFile"><i class="fa-solid fa-file-arrow-up" inert></i> {{localize "TRAPS.App.importFile"}}</button>
+    </div>
   </div>
   {{/unless}}{{/if}}
   {{#if entries.length}}
+  {{#if isMine}}
+  <div class="st-mine-bar">
+    <button type="button" class="st-btn is-primary" data-action="newTrap"><i class="fa-solid fa-plus" inert></i> {{localize "TRAPS.App.newTrap"}}</button>
+    <span class="st-mine-files">
+      <button type="button" class="st-btn is-quiet" data-action="exportAll" data-tooltip="{{localize "TRAPS.App.exportAllHint"}}"><i class="fa-solid fa-file-arrow-down" inert></i> {{localize "TRAPS.App.exportAll"}}</button>
+      <button type="button" class="st-btn is-quiet" data-action="importFile" data-tooltip="{{localize "TRAPS.App.importHint"}}"><i class="fa-solid fa-file-arrow-up" inert></i> {{localize "TRAPS.App.importFile"}}</button>
+    </span>
+  </div>
+  {{/if}}
   <div class="st-toolbar">
     <label class="st-search">
       <i class="fa-solid fa-magnifying-glass" inert></i>
@@ -101,6 +114,7 @@
             <button type="button" class="st-badge st-vis{{#if visible}} is-shown{{/if}}" data-action="toggleVisible" aria-pressed="{{#if visible}}true{{else}}false{{/if}}" data-tooltip="{{#if visible}}{{localize "TRAPS.App.hide"}}{{else}}{{localize "TRAPS.App.reveal"}}{{/if}}">{{#if visible}}<i class="fa-solid fa-eye" inert></i> {{localize "TRAPS.App.revealed"}}{{else}}<i class="fa-solid fa-eye-slash" inert></i> {{localize "TRAPS.App.hidden"}}{{/if}}</button>
             {{#if detected}}{{#unless visible}}<span class="st-badge is-detected"><i class="fa-solid fa-circle-exclamation" inert></i> {{#if noticed}}{{noticed}}{{else}}{{localize "TRAPS.App.detected"}}{{/if}}</span>{{/unless}}{{/if}}
             {{#if triggers}}<span class="st-badge">{{triggersLabel}}</span>{{/if}}
+            {{#if everyTurn}}<span class="st-badge is-activation is-turn" data-tooltip="{{localize "TRAPS.Turn.tooltip"}}"><i class="fa-solid fa-arrows-rotate" inert></i> {{localize "TRAPS.Turn.badge"}}</span>{{/if}}
             {{#if activation}}<span class="st-badge is-activation{{#if manual}} is-manual{{/if}}"><i class="fa-solid {{#if manual}}fa-hand-pointer{{else}}fa-shoe-prints{{/if}}" inert></i> {{activation}}</span>{{/if}}
           </div>
           <div class="st-row-stats">

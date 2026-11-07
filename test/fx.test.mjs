@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { EFFECT_NAMES, createEffect } from "../scripts/core/fx/painters.mjs";
-import { FX_NAMES, FX_PRESETS, pickJb2a, soundPath } from "../scripts/core/fx/presets.mjs";
+import { FX_NAMES, FX_PRESETS, JB2A_PER_TOPIC, flightPath, jb2aGroups, pickJb2a, soundPath } from "../scripts/core/fx/presets.mjs";
 
 /** Холст-заглушка: всё принимает, ничего не рисует; считает вызовы и ловит NaN в координатах. */
 function stubContext() {
@@ -67,6 +67,62 @@ test("звук и JB2A", () => {
   assert.equal(pickJb2a("gas", has), "jb2a.fog_cloud");
   assert.equal(pickJb2a("gas", () => false), null);
   assert.equal(pickJb2a("gas", () => { throw new Error("not ready"); }), null);
+});
+
+test("список JB2A: разделы для ловушек, без кусков анимации и лишних петель", () => {
+  const groups = jb2aGroups([
+    "jb2a.spike_trap.05x05ft.top.holes.normal",
+    "jb2a.spike_trap.05x05ft.top.holes.still_frame.deployed",
+    "jb2a.fog_cloud.01.white.0",
+    "jb2a.fog_cloud.01.white.1",
+    "jb2a.magic_signs.circle.02.evocation.complete.red",
+    "jb2a.magic_signs.circle.02.evocation.loop.red",
+    "jb2a.magic_signs.circle.02.evocation.intro.red",
+    "jb2a.magic_signs.circle.02.evocation.outro.red",
+    "jb2a.magic_signs.circle.02.necromancy.loop.green",
+    "jb2a.web.01",
+    "jb2a.ioun_stones.01.blue",
+    "jb2a.healing_generic.200px.blue",
+    "sequencer.ping",
+    42,
+  ]);
+  const map = Object.fromEntries(groups.map((g) => [g.label, g.options.map((o) => o.value)]));
+  assert.deepEqual(Object.keys(map), ["Fog cloud", "Magic signs", "Spike trap", "Web"]);
+  assert.deepEqual(map["Fog cloud"], ["jb2a.fog_cloud.01.white"], "номера вариантов в конце сливаются в одну запись");
+  assert.deepEqual(map["Spike trap"], ["jb2a.spike_trap.05x05ft.top.holes.normal"], "стоп-кадр не нужен");
+  assert.deepEqual(map["Magic signs"], [
+    "jb2a.magic_signs.circle.02.evocation.complete.red",
+    "jb2a.magic_signs.circle.02.necromancy.loop.green",
+  ], "петля остаётся, только если нет целой анимации");
+  assert.equal(groups.find((g) => g.label === "Web").options[0].label, "web");
+  assert.equal(groups.find((g) => g.label === "Spike trap").options[0].label, "05x05ft · top · holes · normal");
+});
+
+test("список JB2A: длины полёта (…05ft, …30ft) — одна запись, длину подберёт Sequencer", () => {
+  const groups = jb2aGroups([
+    "jb2a.arrow.physical.white.01.05ft",
+    "jb2a.arrow.physical.white.01.30ft",
+    "jb2a.arrow.physical.white.01.90ft",
+    "jb2a.fire_bolt.orange.15ft",
+    "jb2a.fire_bolt.orange.30ft",
+  ]);
+  assert.deepEqual(groups.map((g) => [g.label, g.options.map((o) => o.value)]), [
+    ["Arrow", ["jb2a.arrow.physical.white.01"]],
+    ["Fire bolt", ["jb2a.fire_bolt.orange"]],
+  ]);
+});
+
+test("полёт через область: вдоль длинной стороны, с запасом по краям", () => {
+  assert.deepEqual(flightPath({ x: 500, y: 300 }, 400, 100, 100), { from: { x: 250, y: 300 }, to: { x: 750, y: 300 } });
+  assert.deepEqual(flightPath({ x: 500, y: 300 }, 100, 300, 100), { from: { x: 500, y: 100 }, to: { x: 500, y: 500 } });
+  assert.deepEqual(flightPath({ x: 0, y: 0 }, 100, 100), { from: { x: -50, y: 0 }, to: { x: 50, y: 0 } }, "квадрат — слева направо");
+});
+
+test("список JB2A: не больше JB2A_PER_TOPIC вариантов в разделе; пусто — пустой список", () => {
+  const many = Array.from({ length: JB2A_PER_TOPIC + 30 }, (_, i) => `jb2a.impact.fire.c${i}`);
+  assert.equal(jb2aGroups(many)[0].options.length, JB2A_PER_TOPIC);
+  assert.deepEqual(jb2aGroups([]), []);
+  assert.deepEqual(jb2aGroups(null), []);
 });
 
 test("JB2A — только там, где у него подходящая анимация; механика всегда своя", () => {

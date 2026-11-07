@@ -144,6 +144,7 @@ function brackets(ctx, x, y, w, h, cell, color, a, off) {
  * поле markerPad(cell). reveal — доля анимации появления (1 — метка на месте), pop — смены состояния.
  * glyph / badgeGlyph — { text, family, weight } для значка ловушки и значка состояния.
  * device, options, fx, damageType, seed — для рисунка ловушки (core/tells.mjs).
+ * image — своя картинка ведущего (загруженный Image или холст): рисуется вместо рисунка модуля.
  */
 export function drawMarker(ctx, o) {
   const { x, y, width: w, height: h, cell } = o;
@@ -158,7 +159,7 @@ export function drawMarker(ctx, o) {
   const pFrame = outQuart(seg(reveal, 0, 0.5));
   const pArea = seg(reveal, 0.18, 0.7);
 
-  if (hasTell(o.device)) return drawTellMarker(ctx, o, { x, y, w, h, cell, state, ghost, reveal, pop, sev, live, tone });
+  if (imageSize(o.image) || hasTell(o.device)) return drawTellMarker(ctx, o, { x, y, w, h, cell, state, ghost, reveal, pop, sev, live, tone });
 
   if (!ghost) {
     if (live) hatch(ctx, x, y, w, h, cell, sev, pArea);
@@ -279,20 +280,23 @@ function drawTellMarker(ctx, o, { x, y, w, h, cell, state, ghost, reveal, pop, s
   }
   ctx.globalAlpha = ghost ? 0.42 : state === "disarmed" ? 0.6 : 1;
   if (state === "disarmed" && "filter" in ctx) ctx.filter = "grayscale(0.85)";
-  drawTell(ctx, {
-    x,
-    y,
-    width: w,
-    height: h,
-    cell,
-    device: o.device,
-    options: o.options,
-    fx: o.fx,
-    damageType: o.damageType,
-    spent: state === "spent",
-    seed: o.seed ?? 1,
-    ownTrigger: o.ownTrigger !== false,
-  });
+  if (imageSize(o.image)) drawCover(ctx, o.image, x, y, w, h, state === "spent");
+  else {
+    drawTell(ctx, {
+      x,
+      y,
+      width: w,
+      height: h,
+      cell,
+      device: o.device,
+      options: o.options,
+      fx: o.fx,
+      damageType: o.damageType,
+      spent: state === "spent",
+      seed: o.seed ?? 1,
+      ownTrigger: o.ownTrigger !== false,
+    });
+  }
   ctx.restore();
 
   if (!ghost && pArt > 0 && pArt < 1) {
@@ -317,3 +321,29 @@ function drawTellMarker(ctx, o, { x, y, w, h, cell, state, ghost, reveal, pop, s
   if (!ghost && o.badge !== false) frame(ctx, { x, y, w, h, cell, live, tone, pArea: pFrame, pFrame });
   if (o.badge !== false) drawBadge(ctx, { x, y, r: cell * 0.15, cell, state, ghost, sev, glyph: o.badgeGlyph, pop, device: o.device, ghostBadge: o.ghostBadge });
 }
+
+/** Размер картинки, если она уже загружена; иначе null. */
+function imageSize(img) {
+  const w = Number(img?.naturalWidth || img?.width);
+  const h = Number(img?.naturalHeight || img?.height);
+  return w > 0 && h > 0 ? { w, h } : null;
+}
+
+/** Картинка заполняет область целиком (лишнее по краям обрезается), сработавшая — темнее. */
+function drawCover(ctx, img, x, y, w, h, spent) {
+  const size = imageSize(img);
+  const k = Math.max(w / size.w, h / size.h);
+  const sw = w / k;
+  const sh = h / k;
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x, y, w, h);
+  ctx.clip();
+  ctx.drawImage(img, (size.w - sw) / 2, (size.h - sh) / 2, sw, sh, x, y, w, h);
+  if (spent) {
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    ctx.fillRect(x, y, w, h);
+  }
+  ctx.restore();
+}
+

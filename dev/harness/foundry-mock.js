@@ -472,7 +472,7 @@
   /* ---------- game, CONFIG, ui ---------- */
   window.Hooks = Hooks;
   window.Roll = Roll;
-  window.CONST = { REGION_EVENTS: { TOKEN_MOVE_IN: "tokenMoveIn" }, REGION_VISIBILITY: { LAYER: 0, GAMEMASTER: 1, ALWAYS: 2 } };
+  window.CONST = { REGION_EVENTS: { TOKEN_MOVE_IN: "tokenMoveIn", TOKEN_TURN_START: "tokenTurnStart" }, REGION_VISIBILITY: { LAYER: 0, GAMEMASTER: 1, ALWAYS: 2 } };
   const lab = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, typeof v === "string" ? { label: v } : v]));
   window.CONFIG = {
     Canvas: { polygonBackends: { sight: { testCollision }, move: { testCollision } } },
@@ -502,7 +502,14 @@
     messages: { get: (id) => messages.get(id) ?? null },
     // Одна сцена — как game.scenes в Foundry.
     scenes: { get: (id) => (id === scene.id ? scene : null), get active() { return scene; } },
-    modules: { get: (id) => (id === MODULE ? (game._module ??= { id, active: true, version: manifest.version, url: manifest.url }) : null) },
+    modules: {
+      get: (id) => {
+        if (id === MODULE) return (game._module ??= { id, active: true, version: manifest.version, url: manifest.url });
+        // ?jb2a=1 — будто стоят Sequencer и JB2A (база ниже, рядом с foundry).
+        if (id === "sequencer" && params.get("jb2a")) return { id, active: true };
+        return null;
+      },
+    },
     i18n: {
       lang: params.get("lang") ?? "ru",
       translations: {},
@@ -729,6 +736,43 @@
   class Field { constructor(options = {}) { this.options = options; this.initial = options.initial; } }
   class BooleanField extends Field { constructor(options = {}) { super({ initial: false, ...options }); } }
 
+  /* ---------- ?jb2a=1: Sequencer с небольшой базой JB2A — проверить выбор анимаций ---------- */
+  if (params.get("jb2a")) {
+    const entries = [
+      "jb2a.fireball.explosion.orange", "jb2a.fireball.beam.orange", "jb2a.explosion.01.orange", "jb2a.explosion.02.blue",
+      "jb2a.fog_cloud.02.green", "jb2a.fog_cloud.02.white", "jb2a.stinking_cloud", "jb2a.darkness.black",
+      "jb2a.ice_spikes.radial.burst.white", "jb2a.impact.frost", "jb2a.static_electricity.03.blue", "jb2a.chain_lightning.primary.blue",
+      "jb2a.liquid.splash.green", "jb2a.toll_the_dead.purple.skull_smoke", "jb2a.falling_rocks.top.1x1.grey.0", "jb2a.falling_rocks.top.1x1.grey.1",
+      "jb2a.web.01", "jb2a.entangle.green", "jb2a.thunderwave.center.blue", "jb2a.healing_generic.200px.green", "jb2a.token_border.circle.static.blue",
+      "jb2a.arrow.physical.white.01.05ft", "jb2a.arrow.physical.white.01.30ft", "jb2a.fire_bolt.orange.15ft", "jb2a.fire_bolt.orange.30ft",
+      "jb2a.magic_signs.rune.evocation.intro.red", "jb2a.magic_signs.rune.evocation.complete.red", "jb2a.magic_signs.rune.evocation.loop.red",
+    ];
+    const has = (k) => entries.some((e) => e === k || e.startsWith(`${k}.`));
+    // Полёт (…05ft, …30ft) — как SequencerFileRangeFind у настоящего Sequencer.
+    const getEntry = (k) => (has(k) ? { rangeFind: entries.some((e) => (e === k || e.startsWith(`${k}.`)) && /\.\d+ft$/.test(e)) } : false);
+    window.Sequencer = { Database: { flattenedEntries: entries, entryExists: has, getEntry } };
+    window.Sequence = class {
+      effect() { return this; }
+      file(f) { this.f = f; return this; }
+      atLocation() { return this; }
+      stretchTo() { this.flight = true; return this; }
+      size() { return this; }
+      locally() { return this; }
+      async play() { window.__harness?.toast?.("info", `Sequencer играет ${this.f}${this.flight ? " (полёт через область)" : ""}`); }
+    };
+  }
+
+  /* ---------- окно выбора файла: на стенде — путь вручную (по умолчанию тестовая картинка) ---------- */
+  class FilePicker {
+    constructor(options = {}) { this.options = options; }
+    async browse(current) {
+      const path = window.prompt("Стенд: путь к картинке на «сервере»", current || "/dev/harness/sample-mold.webp");
+      if (path) this.options.callback?.(path);
+    }
+    static async createDirectory() { return {}; }
+    static async upload() { return false; }
+  }
+
   window.foundry = {
     canvas: { primary: { PrimarySpriteMesh } },
     utils: {
@@ -750,6 +794,7 @@
       },
     },
     applications: {
+      apps: { FilePicker: { implementation: FilePicker } },
       instances,
       api: { ApplicationV2, HandlebarsApplicationMixin, DialogV2 },
       handlebars: { loadTemplates: (paths) => (window.__mock.partials = loadPartials(Array.isArray(paths) ? paths : Object.values(paths))) },

@@ -432,6 +432,27 @@ function setView(player) {
 }
 $("#view").addEventListener("click", () => setView(!window.__mock.playerView));
 window.__harness.setView = setView;
+/* ---------- бой: «Следующий ход» — как Combat в Foundry: у того, чей ход начался, срабатывают
+   поведения областей, в которых он стоит (событие tokenTurnStart). ---------- */
+let turn = -1;
+let round = 0;
+$("#turn").addEventListener("click", async () => {
+  const order = scene._tokens.filter((tk) => tk.actor);
+  if (!order.length) return;
+  turn = (turn + 1) % order.length;
+  if (turn === 0) round++;
+  const token = order[turn];
+  $("#turn").innerHTML = `<i class="fa-solid fa-hourglass-start"></i> Раунд ${round}, ход: ${token.name} · следующий`;
+  toast("info", `Раунд ${round}: ходит ${token.name}.`);
+  for (const region of token.regions) {
+    for (const behavior of region._behaviors) {
+      if (behavior.disabled) continue;
+      const handler = CONFIG.RegionBehavior.dataModels[behavior.type]?.events?.[CONST.REGION_EVENTS.TOKEN_TURN_START];
+      await handler?.call(behavior.system, { name: "tokenTurnStart", region, user: game.user, data: { token } });
+    }
+  }
+});
+
 $("#demo").addEventListener("click", async () => {
   await api.place("fireJet", { x: 5.5 * GRID, y: 3.5 * GRID });
   await api.place("poisonGas", { x: 9.5 * GRID, y: 5.5 * GRID });
